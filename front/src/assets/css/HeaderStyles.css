@@ -57,3 +57,9 @@
 }
 
 
+.card-header-img{
+    background-image: url("../img/header.png");
+    height: 100%;
+    background-position: center;
+    border: none
+}

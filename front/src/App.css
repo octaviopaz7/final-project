@@ -17,3 +17,16 @@ body {
     border: 2px solid #3d367a;
     transform: scale(1.005);
 }
+
+::-webkit-scrollbar {
+    width: 15px;
+   
+    background-color: #D7F39E;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #3d367a;
+    border: 1px solid white;
+    border-radius: 25px; 
+    height: 6px;
+}

@@ -1,20 +1,10 @@
-/* Estilos de la React Calendar */
-.react-calendar {
-    background-color: #3d367a;
-    border-radius: 25px;
-}
 
 /* Sección de servicios de introducción */
-.intro-services-section {
-    min-height: 90vh;
-    justify-content: center;
-    margin-bottom: 80px;
-}
 
 /* Sección de servicios */
 .services-section {
     justify-content: center;
-    min-height: 60vh;
+    min-height: 70vh;
 }
 
 /* Botón de formulario de agregar */
