@@ -1,15 +1,22 @@
+/* Estilo general de las tablas */
 .table>:not(caption)>*>* {
-    background-color: #170d35;
-    color: #D7F39E;
-    border: 2px solid #aed1f4;
+    background-color: #170d35; /* Fondo de las celdas de la tabla */
+    color: #3d367a; /* Color del texto en las celdas de la tabla */
+    border: 2px solid #c49ef3; /* Borde de las celdas de la tabla */
 }
+
+/* Estilo de filas impares en tablas con clase table-striped */
 .table-striped>tbody>tr:nth-of-type(odd)>* {
-    --bs-table-bg-type: #D7F39E;
+    --bs-table-bg-type: #c49ef3; /* Fondo de filas impares en tablas striped */
 }
+
+/* Estilo específico para filas impares con clase table-row en tablas con clase table-striped */
 .table-striped>tbody>tr.table-row:nth-of-type(odd)>* {
-    --bs-table-bg-type:#44339cc9;
+    --bs-table-bg-type: #44339cc9; /* Fondo específico para ciertas filas impares en tablas striped */
 }
-.table-hover>tbody>tr:hover>*{
-    background-color: #D7F39E;
-    color:#170d35;
+
+/* Estilo de filas al pasar el ratón por encima en tablas con clase table-hover */
+.table-hover>tbody>tr:hover>* {
+    background-color: #c49ef3; /* Fondo al pasar el ratón por encima */
+    color: #170d35; /* Color del texto al pasar el ratón por encima */
 }
