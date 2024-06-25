@@ -28,16 +28,17 @@ const ContactSection = () => {
             <Container>
                 <Row>
                     <Col lg={6} sm={12} md={6}>
-                    <div>
+                        <div>
+
                             <h3 className="contact-title mb-3">¡Estamos aquí para ayudarte!</h3>
-                            <p className="mb-3">Contáctanos para programar tu próxima consulta dental y resolver cualquier pregunta que puedas tener.</p>
+                            <p className="mb-3 fw-medium">Contáctanos para programar tu próxima consulta dental y resolver cualquier pregunta que puedas tener.</p>
                             <div className="d-flex align-items-center mb-3">
                                 <FontAwesomeIcon icon={faPhone} className="me-2" />
-                                <p className="mb-0">+54 381 347 8761</p>
+                                <p className="mb-0 fw-semibold">+54 381 347 8761</p>
                             </div>
                             <div className="d-flex align-items-center">
                                 <FontAwesomeIcon icon={faEnvelope} className="me-2" />
-                                <p className="mb-0">contacto@tudentista.com</p>
+                                <p className="mb-0 fw-semibold">contacto@tudentista.com</p>
                             </div>
                         </div>
                     </Col>

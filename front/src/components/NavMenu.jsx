@@ -1,15 +1,10 @@
 
-import { Container, Nav, Navbar, Button } from 'react-bootstrap';
+import { Container, Nav, Navbar, Offcanvas} from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { home, services, appointments, contact } from '../routes/routes'; 
 import LogoDiente from '../assets/img/LogoDiente.png';
-
 import { useState } from 'react';
-import { Container, Nav, Navbar, Offcanvas } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 import { home, services, appointments, contact, users } from '../routes/routes.js';
-import { useAuth } from '../context/AuthContext.jsx';
 import Login from './Login';
 
 const NavMenu = () => {
@@ -47,8 +42,7 @@ const NavMenu = () => {
                                         <Nav.Link as={Link} to={services} className='nav-link-item fw-semibold' >Servicios</Nav.Link>
                                         <Nav.Link as={Link} to={appointments} className='nav-link-item fw-semibold' >Turnos</Nav.Link>
                                         <Nav.Link as={Link} to={contact} className='nav-link-item fw-semibold' >Contactos</Nav.Link>
-                                        <Nav.Link as={Link} to={users} className='nav-link-item fw-semibold' >Registrar</Nav.Link>
-                                        <button className="btn btn-nav" onClick={logout}>Cerrar sesión</button>
+                                        <button className="btn btn-nav-b ms-4" onClick={logout}>Cerrar sesión</button>
                                     </>
                                 ) : (
                                     <>
@@ -56,7 +50,7 @@ const NavMenu = () => {
                                          <Nav.Link href='#abtus' className='nav-link-item fw-semibold' >Sobre Nosotros</Nav.Link>
                                          <Nav.Link href='#appointment' className='nav-link-item fw-semibold'>Turno</Nav.Link>
                                          <Nav.Link href='#contact' className='nav-link-item fw-semibold'>Contacto</Nav.Link>
-                                        <button className="btn btn-nav" onClick={handleShowLogin}>Iniciar sesión</button>
+                                        <button className="btn btn-nav ms-4" onClick={handleShowLogin}>Iniciar sesión</button>
                                     </>
                                 )}
                             </Nav>

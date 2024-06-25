@@ -14,13 +14,12 @@
 
 .footer-nav {
     list-style: none;
-    font-family: var(--freeman);
-    color: var(--light);
     font-weight: 400;
     width: 100%;
 }
 .footer-item{
     font-size: 1.7rem;
+    color: white;
 }
 .footer-item a{
     text-decoration: none;
@@ -55,6 +54,7 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    color: white;
 }
 
 .iconos a {

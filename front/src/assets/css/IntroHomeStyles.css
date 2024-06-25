@@ -2,7 +2,7 @@
 
 .intro-container {
     height: 95vh;
-    background-image: url("C:\Users\BANGHO\Desktop\Practicas\Programacion\Proyecto Final-a\front\src\assets\img\Fondo.jpg");
+    background-image: url("../img/fondoHeader.jpg");
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center; 

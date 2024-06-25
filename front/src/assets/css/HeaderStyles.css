@@ -5,7 +5,7 @@
 
 /* Estilos para los enlaces de navegación */
 .nav-link-item {
-    color: #c3c3c3; 
+    color: white; 
     transition: color 0.3s ease-out; 
 }
 
@@ -14,19 +14,25 @@
 }
 
 /* Estilos para el botón de navegación */
-.btn-nav {
-    background-color: #3d367a; 
-    color: #fff; 
+.btn-nav, .btn-nav-b:hover {
+    color: #3d367a; 
+    background-color: #ffffff84; 
     font-weight: 600; 
-    margin-left: 2%; 
 }
-
+.btn-nav:hover, .btn-nav-b{
+    background-color: #3d367a;
+    border: 2px solid #D7F39E;
+    color: #D7F39E;
+}
 /* Estilos para el logo */
 .color-blue {
     color: #c3c3c3; 
 }
 
+.navbar-nav .nav-link.active {
+    color: #D7F39E;
 
+}
 /* Estilos para la fila del encabezado */
 .header-row.row {
     height: 80vh; 
@@ -50,17 +56,4 @@
     color: #3d367a; 
 }
 
-/* Estilos para la imagen del encabezado de la tarjeta */
-.card-header-img {
-    background-image: url("../img/dentalHero.jpeg"); /* Imagen de fondo */
-    height: 100%; 
-    background-repeat: no-repeat; 
-    background-position: center; 
-    background-size: cover; 
-    border-radius: 25px; 
-}
 
-/* Estilos para el título del encabezado de la tarjeta */
-.card-header-title {
-    height: 100%; 
-}

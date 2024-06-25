@@ -53,7 +53,10 @@ const ContactTable = () => {
                     </tbody>
                 </table>
             ) : (
-                <h3 className="text-center">No hay mensajes</h3>
+                <>
+                <h2 className='section-title'>Contactos</h2>
+                <h3 className="text-center">No hay mensajes </h3>
+                 </>
             )}
         </>
     );

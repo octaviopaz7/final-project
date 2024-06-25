@@ -77,8 +77,8 @@ body {
 }
 
 .book-card img {
-    border-top-right-radius: 25px;
-    border-bottom-right-radius: 25px;
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
 }
 
 .book-card .card-body {
@@ -88,4 +88,17 @@ body {
 /* Estilo para texto con color específico */
 .text-color {
     color: #c49ef3;
+}
+
+.section-title{
+    background-color: #3d367a;
+    max-width: fit-content;
+    color: white;
+    font-weight: 700;
+    font-size: 18px;
+    padding: 2px 20px;
+    border-radius: 25px;
+}
+.text-abtus{
+    font-weight: 500;
 }
