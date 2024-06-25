@@ -1,3 +1,10 @@
+
+import { Container, Nav, Navbar, Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import { home, services, appointments, contact } from '../routes/routes'; 
+import LogoDiente from '../assets/img/LogoDiente.png';
+
 import { useState } from 'react';
 import { Container, Nav, Navbar, Offcanvas } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
@@ -14,9 +21,12 @@ const NavMenu = () => {
 
     return (
         <>
-            <Navbar expand="lg" sticky="top" aria-label="Offcanvas navbar large">
-                <Container>
-                    <Navbar.Brand href="#" className="centered-logo color-blue">Logo</Navbar.Brand>
+            <Navbar expand="lg" sticky="top" style={{ backgroundColor: '#3d367a' }}>
+      <Container>
+        <Navbar.Brand as={Link} to={home} className="d-flex align-items-center" style={{ color: '#ffffff' }}>
+          <img src={LogoDiente} alt="Logo de Smile Clinic" className="logo-image me-2" style={{ width: '40px', height: 'auto' }} />
+          Smile Clinic
+        </Navbar.Brand>
                     <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-lg`} />
                     <Navbar.Offcanvas
                         id={`offcanvasNavbar-expand-lg`}
@@ -60,5 +70,4 @@ const NavMenu = () => {
 };
 
 export default NavMenu;
-
 
