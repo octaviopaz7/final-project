@@ -2,7 +2,7 @@
 import { Col, Row, Container, Card } from 'react-bootstrap';
 const AboutUsSection = () => {
     return (
-        <section className='aboutUs-section d-flex align-items-center justify-content-center'>
+        <section id="abtus" className='aboutUs-section d-flex align-items-center justify-content-center'>
             <Container>
                 <Row>
                     <Col lg={6} sm={12} md={6}>

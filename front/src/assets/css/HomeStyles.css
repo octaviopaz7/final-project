@@ -5,7 +5,8 @@ body {
 .font-color {
     color: #3d367a;
 }
-.card-service-home{
+
+.card-service-home {
     height: 23rem;
     transition: 0.7s;
 }
@@ -15,24 +16,44 @@ body {
     border: 3px solid #3d367a;
 }
 
-.card-service-home img, .card-aboutus img{
+.card-service-home img,
+.card-aboutus img {
     border-radius: 25px;
 }
-.contact-section, .services-section, .aboutUs-section {
-    height: 80vh;
+
+.contact-section,
+.services-section,
+.aboutUs-section,
+.appointment-section {
+    min-height: 80vh;
 }
 
 .btn-color {
     background-color: #3d367a;
     border: none;
 }
-
-.btn-book{
-   color: #3d367a;
-   background-color:#D7F39E;
+.btn-color:hover {
+    background-color: #3d367a;
+    color: #D7F39E;
+    border: 3px solid #D7F39E;
+    font-weight: 600;
 }
 
-.contact-title{
+.btn-book {
+    color: #3d367a;
+    background-color: #D7F39E;
+    border: none;
+    transition: 0.08s;
+}
+
+.btn-book:hover {
+    background-color: #3d367a;
+    color: #D7F39E;
+    border: 2px solid #D7F39E;
+
+}
+
+.contact-title {
     font-size: 3rem;
     font-weight: 800;
 }
@@ -43,14 +64,15 @@ body {
     border: 4px solid #D7F39E;
 }
 
-.book-card img{
+.book-card img {
     border-top-right-radius: 25px;
     border-bottom-right-radius: 25px;
 }
-.book-card .card-body{
+
+.book-card .card-body {
     flex: 0;
 }
 
 .text-color {
-      color: #D7F39E;
+    color: #D7F39E;
 }

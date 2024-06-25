@@ -20,11 +20,10 @@ const ContactSection = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // mandar form
         console.log(formData);
     };
     return (
-        <section className="contact-section d-flex align-items-center justify-content-center">
+        <section id="contact" className="contact-section d-flex align-items-center justify-content-center">
             <Container>
                 <Row>
                     <Col lg={6} sm={12} md={6}>
