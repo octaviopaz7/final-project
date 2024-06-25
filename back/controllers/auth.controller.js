@@ -1,9 +1,7 @@
 import * as usersService from '../services/user.service.js';
 import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv'
 
-dotenv.config();
-const SECRET_KEY = process.env.SECRET_KEY;
+const SECRET_KEY = "secreto";
 
 const createToken = (user) => {
     return jwt.sign(
@@ -30,11 +28,9 @@ export const register = async (req, res) => {
 
         res.status(201).json({ message: "Usuario registrado exitosamente" });
     } catch (error) {
-        console.error("Error al registrar usuario:", error);
-        res.status(500).json({ message: "Error al registrar usuario", error: error.message });
+        res.status(500).json({ message: "Error al registrar usuario" });
     }
 };
-
 
 export const login = async (req, res) => {
     try {
@@ -47,14 +43,11 @@ export const login = async (req, res) => {
 
         const token = createToken(user);
         res.cookie("token", token, { httpOnly: true });
-        console.log(token)
         res.status(201).json({ message: "Usuario loggeado exitosamente" });
     } catch (error) {
         res.status(500).json({ message: "Error al iniciar sesión. Intente nuevamente" });
     }
 };
-
-
 
 export const logout = (req, res) => {
     res.clearCookie("token", { path: '/' });

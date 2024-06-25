@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Container, Row } from 'react-bootstrap';
 import AddForm from "../components/AddForm";
-import Table from "../components/TableAppoinment";
+import Table from "../components/Table";
 import axios from 'axios';
 
 const Appointments = () => {
@@ -9,7 +9,7 @@ const Appointments = () => {
 
     const fetchAppointments = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/api/appointments',  { credentials:"include" });
+            const response = await axios.get('http://localhost:5000/api/appointments', { withCredentials: true });
             setAppointments(response.data);
         } catch (error) {
             console.error('Error fetching appointments:', error);
@@ -22,12 +22,14 @@ const Appointments = () => {
 
     return (
         <Container>
-            <section className="appointment-section d-flex flex-column align-items-center justify-content-center">
-                <Row className='w-100 py-5'>
+            <section className="services-section d-flex flex-column">
+                <Row>
                     <h2 className="text-center subtitle">Agregar Turno</h2>
                     <AddForm fetchAppointments={fetchAppointments} />
                 </Row>
-                <Row className='py-5'>
+            </section>
+            <section className="services-section d-flex flex-column">
+                <Row>
                     <h2 className="text-center subtitle">Lista de turnos</h2>
                     <Table appointments={appointments} />
                 </Row>

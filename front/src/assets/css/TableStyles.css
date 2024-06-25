@@ -1,31 +1,15 @@
-/* Estilo general de las tablas */
 .table>:not(caption)>*>* {
-    background-color: #3d367a;
-    color: hsl(80, 78%, 79%);
+    background-color: #170d35;
+    color: #D7F39E;
     border: 2px solid #aed1f4;
-
 }
-
-/* Estilo de filas impares en tablas con clase table-striped */
 .table-striped>tbody>tr:nth-of-type(odd)>* {
-
-    --bs-table-bg-type: #44339cc9;
-
+    --bs-table-bg-type: #D7F39E;
 }
-
-/* Estilo específico para filas impares con clase table-row en tablas con clase table-striped */
 .table-striped>tbody>tr.table-row:nth-of-type(odd)>* {
     --bs-table-bg-type:#44339cc9;
 }
-.table>tbody>tr:hover>*{
+.table-hover>tbody>tr:hover>*{
     background-color: #D7F39E;
     color:#170d35;
-    font-weight: 600;
-}
-
-.btn-table {
-    background-color: #170d35;
-    color:#D7F39E;
-    border: 2px solid #D7F39E;
-    margin-right: 5%;
 }

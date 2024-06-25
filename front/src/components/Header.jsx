@@ -1,5 +1,8 @@
-import { Container, Row, Col } from 'react-bootstrap'
+import { Container, Row, Col, Image } from 'react-bootstrap'
+import NavMenu from './NavMenu'
+import CardHeader from './CardHeader'
 import '../assets/css/HeaderStyles.css'
+import headerImg from '../assets/img/header.png'
 const Header = () => {
   return (
     <>

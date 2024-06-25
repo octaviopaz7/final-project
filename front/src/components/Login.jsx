@@ -1,74 +1,77 @@
+// Login.js
 import { useState } from "react";
 import { Button, Form, Modal } from 'react-bootstrap';
 import axios from 'axios';
-import { useAuth } from '../context/AuthContext'; 
+import { useAuth } from '../context/AuthContext'; // Asegúrate de importar el contexto correctamente
 
-const Login = ({ show, handleClose }) => {
+const Login = () => {
+    const [show, setShow] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const { login } = useAuth();
 
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
     const handleLogin = async (event) => {
         event.preventDefault();
         try {
-            const response = await fetch('http://localhost:3000/api/auth/login', {
-                method: 'POST',
-                credentials: 'include', 
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email, password }),
-            });
-    
+            const response = await axios.post('http://localhost:5000/api/auth/login', { email, password }, { withCredentials: true });
             if (response.status === 201) {
                 login(); 
                 handleClose(); 
-            } else {
-                console.error('Error durante el inicio de sesión:', response.statusText);
             }
         } catch (error) {
             console.error('Error durante el inicio de sesión:', error);
         }
     };
-    
 
     return (
-        <Modal show={show} onHide={handleClose}>
-            <Modal.Header closeButton>
-                <Modal.Title>Iniciar Sesión</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <Form onSubmit={handleLogin}>
-                    <Form.Group className="mb-3" controlId="formEmail">
-                        <Form.Label>Correo electronico</Form.Label>
-                        <Form.Control
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                        />
-                    </Form.Group>
-                    <Form.Group className="mb-3" controlId="formPassword">
-                        <Form.Label>Contraseña</Form.Label>
-                        <Form.Control
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                        />
-                    </Form.Group>
-                    <div className="d-flex justify-content-center">
-                    <Button className="basic-btn" type="submit">
-                        Iniciar Sesión
+        <>
+            <Button variant="primary" onClick={handleShow}>
+                Iniciar sesión
+            </Button>
+
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Login</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form onSubmit={handleLogin}>
+                        <Form.Group className="mb-3" controlId="formEmail">
+                            <Form.Label>Email address</Form.Label>
+                            <Form.Control
+                                type="email"
+                                placeholder="name@example.com"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                            />
+                        </Form.Group>
+                        <Form.Group className="mb-3" controlId="formPassword">
+                            <Form.Label>Password</Form.Label>
+                            <Form.Control
+                                type="password"
+                                placeholder="Password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                            />
+                        </Form.Group>
+                        <Button variant="primary" type="submit">
+                            Login
+                        </Button>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        cerrar
                     </Button>
-                    </div>
-                </Form>
-            </Modal.Body>
-    
-        </Modal>
+                </Modal.Footer>
+            </Modal>
+        </>
     );
 };
 
 export default Login;
-
 

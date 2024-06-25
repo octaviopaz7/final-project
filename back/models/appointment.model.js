@@ -2,44 +2,49 @@ import mongoose from "mongoose";
 const { Schema } = mongoose;
 
 const appointmentSchema = new Schema({
-    firstName: {
-        type: String,
-        required: true,
-    },
-    lastName: {
-        type: String,
-        required: true,
-    },
-    phone: {
-        type: String,
-        required: true,
-    },
-    appointmentType: {
-        type: String,
-        enum: ['Consulta', 'Limpieza', 'Tratamiento','Control', 'Otro'],
-        required: true,
+    patient: {
+        type: Schema.Types.ObjectId,
+        ref: 'Patient',
+        required: true
     },
     dateAppointment: {
         type: Date,
-        required: true,
+        required: true
+    },
+    appointmentType: {
+        type: String,
+        enum: ['Consulta', 'Limpieza', 'Tratamiento', 'Otro'],
+        required: true
+    },
+    notes: {
+        type: String
+    },
+    professional: {
+        type: Schema.Types.ObjectId,
+        ref: 'Professional',
+        required: true
+    },
+    service: {
+        type: Schema.Types.ObjectId,
+        ref: 'Service',
+        required: true
     },
     reminderSent: {
         type: Boolean,
-        default: false,
+        default: false
     },
     status: {
         type: String,
         enum: ['Pendiente', 'Confirmado', 'Completado', 'Cancelado'],
-        default: 'Pendiente',
-        required: true,
+        required: true
     },
     createdAt: {
         type: Date,
-        default: Date.now,
+        default: Date.now
     },
     updatedAt: {
         type: Date,
-        default: Date.now,
+        default: Date.now
     }
 });
 

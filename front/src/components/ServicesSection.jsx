@@ -2,20 +2,20 @@ import { Container, Row, Col, Card } from 'react-bootstrap'
 const servicios = [
     {
         titulo: 'Ortodoncia',
-        descripcion: 'Tratamientos para alinear los dientes y corregir problemas de mordida mediante aparatos como brackets y alineadores.',
+        descripcion: 'Tratamientos para alinear los dientes y corregir la mordida.',
         imagen: 'https://assets-global.website-files.com/601d7e7320ecf0fa9e816a33/601def4a7b7d528765398735_image-6-blog-dentist-template-p-2000.jpeg', 
     },
     {
         titulo: 'Blanqueamiento dental',
-        descripcion: 'Procedimientos estéticos para mejorar el color de los dientes, eliminando manchas y decoloraciones.',
+        descripcion: 'Procedimientos para mejorar el color de los dientes.',
         imagen: 'https://assets-global.website-files.com/601d7e7320ecf0fa9e816a33/601def0b261d9f227a3d2f59_image-5-blog-dentist-template-p-800.jpeg',
     },
     {
         titulo: 'Implantes dentales',
-        descripcion: 'Procedimientos para reemplazar dientes perdidos mediante la colocación de implantes de titanio que se integran con el hueso dental.',
+        descripcion: 'Restauración de dientes perdidos mediante implantes de titanio.',
         imagen: 'https://assets-global.website-files.com/601d7e7320ecf0fa9e816a33/601deeec10c1a30a672b7178_image-4-blog-dentist-template-p-500.jpeg', 
     }
-];
+]
 const ServicesSection = () => {
     return (
         <section id="services" className="services-section d-flex align-items-center justify-content-center">

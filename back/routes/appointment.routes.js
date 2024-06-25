@@ -7,7 +7,6 @@ router.post('/', appointmentsController.createAppointment);
 router.get('/', appointmentsController.getAppointments);
 router.get('/:id', appointmentsController.getAppointmentById);
 router.put('/:id', appointmentsController.updateAppointment);
-router.put('/:id/status', appointmentsController.updateStatusAppointment);
 router.delete('/:id', appointmentsController.deleteAppointment);
 
 export default router;

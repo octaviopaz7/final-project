@@ -2,9 +2,7 @@
 import { Container,Row,Col } from 'react-bootstrap';
 import '../assets/css/FooterStyles.css';
 import { Link } from 'react-router-dom';
-import Icons from './Icons';
-import LogoDiente from '../assets/img/LogoDiente.png';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const Footer = () => {
     return (
@@ -20,17 +18,18 @@ const Footer = () => {
 
                                 </ul>
                             </Col>
-                            <Col xs={12} md={4} lg={4} className='footer-col p-0 d-flex flex-column justify-content-center align-items-center position-relative'>
-                            <img src={LogoDiente} alt="Logo Diente" className="tooth-logo" />  { }
-                        <p className="text-muted">© {new Date().getFullYear()} San Miguel de Tucumán</p>
-                        <div className="footer-icons">
-                            <Icons />
-                        </div>
-                    </Col>
-                    <Col xs={12} md={4} lg={4} className='footer-col p-0 d-flex justify-content-center'>
-                    </Col>
-                </Row>
-            </Container>
+                            <Col xs={12} md={4} lg={4} className='footer-col p-0 d-flex flex-column justify-content-center align-items-center'>
+                                <h3>Logo</h3>
+                                <p className="text-muted">© {new Date().getFullYear()} Logo</p>
+                            </Col>
+                            <Col xs={12} md={4} lg={4} className='footer-col p-0 d-flex justify-content-center'>
+                                <ul className='footer-nav footer-media-wrap d-flex p-0'>
+                                    {/* <li className='footer-media'><FontAwesomeIcon icon={faInstagram} /><span className='media-text'> </span></li>
+                                    <li className='footer-media'><FontAwesomeIcon icon={faXTwitter} /><span className='media-text'> </span></li> */}
+                                </ul>
+                            </Col>
+                    </Row>
+                </Container>
             </footer>
     )
 }
