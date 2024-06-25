@@ -1,49 +1,59 @@
-.navbar{
+/* Estilo para la barra de navegación */
+.navbar {
+    background-color: #3d367a; 
+}
+
+/* Estilos para los enlaces de navegación */
+.nav-link-item {
+    color: white; 
+    transition: color 0.3s ease-out; 
+}
+
+.nav-link-item:hover {
+    color: #9d7de9; /* Cambio de color al pasar el mouse por encima */
+}
+
+/* Estilos para el botón de navegación */
+.btn-nav, .btn-nav-b:hover {
+    color: #3d367a; 
+    background-color: #ffffff84; 
+    font-weight: 600; 
+}
+.btn-nav:hover, .btn-nav-b{
     background-color: #3d367a;
-}
-.nav-link-item{
-    color: #D7F39E;
-    transition: box-shadow 0.3s ease-out;
-}
-.btn-nav {
-    background-color: #D7F39E;
-    font-weight: 600;
-    margin-left: 2%;
-}
-a.nav-link-item:hover {
-    color: #D7F39E;
-    text-shadow: 0 0 15px rgba(215, 207, 255, 0.893);
-  }
-.color-blue{
+    border: 2px solid #D7F39E;
     color: #D7F39E;
 }
+/* Estilos para el logo */
+.color-blue {
+    color: #c3c3c3; 
+}
+
+.navbar-nav .nav-link.active {
+    color: #D7F39E;
+
+}
+/* Estilos para la fila del encabezado */
 .header-row.row {
-    height: 80vh;
-    justify-content: center;
-    margin-bottom: 50px;
+    height: 80vh; 
+    justify-content: center; 
+    margin-bottom: 50px; 
 }
 
+/* Estilos para el contenedor del encabezado */
 .header-container.container-fluid {
-    padding: 5%;
+    padding: 5%; 
 }
 
+/* Estilos para las tarjetas */
 .card {
-    border: 2px solid #3d367a;
-    border-radius: 25px;
-
+    border: 2px solid #3d367a; 
+    border-radius: 25px; 
 }
+
+/* Estilos para el texto de color blanco */
 .color-white {
-    color: #3d367a;
-}
-.card-header-img {
-    background-image: url("../img/header.png");
-    height: 100%;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-    border-radius: 25px;
+    color: #3d367a; 
 }
 
-.card-header-title{
-    height: 100%;
-}
+
