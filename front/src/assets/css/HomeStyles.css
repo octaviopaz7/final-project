@@ -7,7 +7,8 @@ body {
     color: #3d367a;
 }
 
-/* Estilos para tarjetas de servicio en la página de inicio */
+
+
 .card-service-home {
     height: 23rem;
     transition: 0.7s;
@@ -18,13 +19,22 @@ body {
     border: 3px solid #3d367a;
 }
 
+
 .card-service-home img, .card-aboutus img {
     border-radius: 25px;
 }
 
-/* Estilos para secciones específicas */
-.contact-section, .services-section, .aboutUs-section {
-    height: 80vh;
+
+.card-service-home img,
+.card-aboutus img {
+    border-radius: 25px;
+}
+
+.contact-section,
+.services-section,
+.aboutUs-section,
+.appointment-section {
+    min-height: 80vh;
 }
 
 /* Estilos para botones */
@@ -32,13 +42,28 @@ body {
     background-color: #3d367a;
     border: none;
 }
+.btn-color:hover {
+    background-color: #3d367a;
+    color: #D7F39E;
+    border: 3px solid #D7F39E;
+    font-weight: 600;
+}
 
 .btn-book {
     color: #3d367a;
     background-color: #d1aef1;
+    background-color: #D7F39E;
+    border: none;
+    transition: 0.08s;
 }
 
-/* Estilos para títulos de contacto */
+.btn-book:hover {
+    background-color: #3d367a;
+    color: #D7F39E;
+    border: 2px solid #D7F39E;
+
+}
+
 .contact-title {
     font-size: 3rem;
     font-weight: 800;
