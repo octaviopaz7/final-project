@@ -1,0 +1,49 @@
+.navbar{
+    background-color: #3d367a;
+}
+.nav-link-item{
+    color: #D7F39E;
+    transition: box-shadow 0.3s ease-out;
+}
+.btn-nav {
+    background-color: #D7F39E;
+    font-weight: 600;
+    margin-left: 2%;
+}
+a.nav-link-item:hover {
+    color: #D7F39E;
+    text-shadow: 0 0 15px rgba(215, 207, 255, 0.893);
+  }
+.color-blue{
+    color: #D7F39E;
+}
+.header-row.row {
+    height: 80vh;
+    justify-content: center;
+    margin-bottom: 50px;
+}
+
+.header-container.container-fluid {
+    padding: 5%;
+}
+
+.card {
+    border: 2px solid #3d367a;
+    border-radius: 25px;
+
+}
+.color-white {
+    color: #3d367a;
+}
+.card-header-img {
+    background-image: url("../img/header.png");
+    height: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    border-radius: 25px;
+}
+
+.card-header-title{
+    height: 100%;
+}

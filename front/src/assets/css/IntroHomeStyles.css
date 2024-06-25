@@ -1,0 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap');
+.intro-container {
+    height: 95vh;
+    background-image: url("https://pruebaproject.my.canva.site/images/9589286abb7b1eb2bd4fb67cfb122b1f.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+}
+.intro-text-wrap{
+    margin: 50px;
+
+}
+
+.intro-title {
+    font-family: var(--code-pro);
+    font-weight: 900;
+}

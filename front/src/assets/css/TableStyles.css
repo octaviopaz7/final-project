@@ -1,0 +1,15 @@
+.table>:not(caption)>*>* {
+    background-color: #170d35;
+    color: #D7F39E;
+    border: 2px solid #aed1f4;
+}
+.table-striped>tbody>tr:nth-of-type(odd)>* {
+    --bs-table-bg-type: #D7F39E;
+}
+.table-striped>tbody>tr.table-row:nth-of-type(odd)>* {
+    --bs-table-bg-type:#44339cc9;
+}
+.table-hover>tbody>tr:hover>*{
+    background-color: #D7F39E;
+    color:#170d35;
+}
