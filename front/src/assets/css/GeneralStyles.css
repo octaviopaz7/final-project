@@ -1,0 +1,55 @@
+
+/* Sección de servicios de introducción */
+
+/* Sección de servicios */
+.services-section {
+    justify-content: center;
+    min-height: 70vh;
+}
+
+/* Botón de formulario de agregar */
+.btn-form-add {
+    background-color: #3d367a;
+    color: #D7F39E;
+    font-weight: 700;
+    border: 3px solid #3d367a;
+    width: 20rem;
+    border-radius: 25px;
+}
+
+/* Efecto hover del botón de formulario de agregar */
+.btn-form-add:hover {
+    color: #c49ef3;
+    background-color: #1900ff;
+    border: 2px solid #c49ef3;
+}
+
+/* Etiquetas de formulario de agregar */
+.add-form-label {
+    color: #3d367a;
+    font-weight: 600;
+}
+
+/* Controles del formulario */
+.form-control {
+    background-color: transparent;
+    border: none;
+    border-radius: 0%;
+    border-bottom: 2px solid #3d367a;
+    color: #3d367a;
+    font-weight: 600;
+}
+
+/* Efecto focus en los controles del formulario */
+.form-control:focus {
+    background-color: transparent;
+    border: 2px solid #3d367a;
+    border-radius: 25px;
+}
+
+/* Filas del formulario */
+.form-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
