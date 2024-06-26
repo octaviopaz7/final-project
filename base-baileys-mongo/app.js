@@ -10,6 +10,8 @@ const QRPortalWeb = require("@bot-whatsapp/portal");
 const BaileysProvider = require("@bot-whatsapp/provider/baileys");
 const MongoAdapter = require("@bot-whatsapp/database/mongo");
 const { appendToSheet } = require("./utils");
+const axios = require("axios").default;
+
 /**
  * Declaramos las conexiones de Mongo
  */
@@ -17,41 +19,62 @@ const { appendToSheet } = require("./utils");
 const MONGO_DB_URI = "mongodb://0.0.0.0:27017";
 const MONGO_DB_NAME = "db_bot";
 
-// const flowPrincipal = addKeyword(EVENTS.WELCOME)
-//   .addAnswer(
-//     "Bienvenido al Centro Médico, a continuación te detallamos las opciones."
-//   )
-//   .addAnswer(
-//     "1-Solicitar Turno/n 2-Cancelar Turno/n 3-Verificar turno.",
-//     { capture: true },
-//     async (ctx, { fallBack, flowDynamic }) => {
-//       console.log(ctx.body, ctx.from);
-//       if (!["1", "2", "3"].includes(ctx.body)) {
-//         return fallBack("Respuesta no valida, ingresa una de las solicitadas.");
-//       }
-//       switch (ctx.body) {
-//         case "1":
-//           return await flowDynamic(
-//             "Eligio opcion 1-Aqui deberia enviar al flow Agendar turno"
-//           );
-//         case "2":
-//           return await flowDynamic(
-//             "Eligio opcion 2-Aqui deberia enviar al flow Cancelar turno"
-//           );
-//         case "3":
-//           return await flowDynamic(
-//             "Eligio opcion 3-Aqui deberia enviar al flow verificar turno "
-//           );
-//         default:
-//           return await flowDynamic(
-//             "Ingresaste una opción incorrecta, intente nuevamente."
-//           );
-//       }
-//     }
-//   );
+const flowSolicitarTurno = addKeyword("###_SOLICITAR_TURNO_###")
+  .addAnswer(
+    "Ingresa tu nombre y apellido",
+    { capture: true },
+    async (ctx, { state }) => {
+      await state.update({ nomyape: ctx.body });
+    }
+  )
+  .addAnswer(
+    "Ingresa la fecha deseada DD/MM",
+    { capture: true },
+    async (ctx, { state }) => {
+      await state.update({ fecha: ctx.body });
+    }
+  )
+  .addAnswer(
+    "Ingresa horario *HH:MM*",
+    { capture: true },
+    async (ctx, { state }) => {
+      await state.update({ horario: ctx.body });
+    }
+  )
+  .addAnswer(
+    "Gracias por tus datos",
+    null,
+    async (ctx, { flowDynamic, state }) => {
+      const turno = {
+        nomyape: state.get("nomyape"),
+        fecha: state.get("fecha"),
+        horario: state.get("horario"),
+      };
+      await flowDynamic(`DATOS INGRESADOS${(nomyape, fecha, horario)}`);
+      console.log(turno);
+    }
+  );
 
 const flowDefault = addKeyword(EVENTS.WELCOME).addAnswer(
-  "Bienvenido al whatsapp del Doctor Genérico, ingresa la palabra *TURNO* si deseas pedir uno"
+  [
+    "Bienvenido a la Clinica Odontologica 🦷 te detallo acotinuación las opciones!",
+    "*1-Solicitar turno* 📅",
+    "*2-Cancelar Turno* ❌",
+    "*3-Verificar turno* ✔",
+  ],
+  { capture: true },
+  async (ctx, { fallBack, gotoFlow, state }) => {
+    const nombre = ctx.pushName;
+    await state.update({
+      nombre: nombre,
+    });
+    if (!["1", "2", "3"].includes(ctx.body)) {
+      return fallBack("Ingresaste una opción incorrecta, intenta nuevamente.");
+    }
+    if (ctx.body === "1") {
+      return gotoFlow(flowSolicitarTurno);
+    }
+  }
 );
 
 const flowPrincipal = addKeyword("turno")
@@ -59,7 +82,15 @@ const flowPrincipal = addKeyword("turno")
   .addAnswer(
     "Ingresa la fecha",
     { capture: true },
-    async (ctx, ctxFn) => await ctxFn.state.update({ fecha: ctx.body })
+    async (ctx, { state, flowDynamic }) => {
+      const respuesta = ctx.body;
+      const nombre = ctx.pushName;
+      console.log(ctx);
+      await state.update({
+        test: respuesta,
+      });
+      await flowDynamic(`Fecha ingresada ${respuesta} por ${nombre}`);
+    }
   )
   .addAnswer(
     "Ingresa el horario",
@@ -71,18 +102,22 @@ const flowPrincipal = addKeyword("turno")
     { capture: true },
     async (ctx, ctxFn) => await ctxFn.state.update({ nombre: ctx.body })
   )
-  .addAnswer("Gracias por los datos", null, async (ctx,ctxFn) => {
+  .addAnswer("Gracias por los datos", null, async (ctx) => {
     const fecha = ctxFn.state.get("fecha");
-    const horario = ctxFn.state.get("horario")
+    const horario = ctxFn.state.get("horario");
     const nombre = ctxFn.state.get("nombre");
-    await appendToSheet([[fecha,horario, nombre]]);
-  })
+    await appendToSheet([[fecha, horario, nombre]]);
+  });
 const main = async () => {
   const adapterDB = new MongoAdapter({
     dbUri: MONGO_DB_URI,
     dbName: MONGO_DB_NAME,
   });
-  const adapterFlow = createFlow([flowPrincipal, flowDefault]);
+  const adapterFlow = createFlow([
+    flowPrincipal,
+    flowDefault,
+    flowSolicitarTurno,
+  ]);
   const adapterProvider = createProvider(BaileysProvider);
   createBot({
     flow: adapterFlow,
@@ -93,6 +128,3 @@ const main = async () => {
 };
 
 main();
-
-
-// LINK PLANILLA GOOGLE https://docs.google.com/spreadsheets/d/1G1I6pW_a-2rqc_yfHdpYmVVoM6UFA6BUDfnS5-pCVMg/edit?usp=sharing

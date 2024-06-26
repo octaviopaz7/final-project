@@ -1,8 +1,7 @@
 const { google } = require('googleapis');
-// Initializes the Google APIs client library and sets up the authentication using service account credentials.
 const auth = new google.auth.GoogleAuth({
-    keyFile: './google.json',  // Path to your service account key file.
-    scopes: ['https://www.googleapis.com/auth/spreadsheets']  // Scope for Google Sheets API.
+    keyFile: './google.json',  
+    scopes: ['https://www.googleapis.com/auth/spreadsheets']  
 });
 
 const spreadsheetId = '1G1I6pW_a-2rqc_yfHdpYmVVoM6UFA6BUDfnS5-pCVMg';
