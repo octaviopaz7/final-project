@@ -19,39 +19,46 @@ const axios = require("axios").default;
 const MONGO_DB_URI = "mongodb://0.0.0.0:27017";
 const MONGO_DB_NAME = "db_bot";
 
+
 const flowSolicitarTurno = addKeyword("###_SOLICITAR_TURNO_###")
   .addAnswer(
     "Ingresa tu nombre y apellido",
     { capture: true },
-    async (ctx, { state }) => {
+    async (ctx, { flowDynamic, state, endFlow }) => {
       await state.update({ nomyape: ctx.body });
+      await flowDynamic(`Gracias ${ctx.body}`);
     }
   )
   .addAnswer(
     "Ingresa la fecha deseada DD/MM",
     { capture: true },
-    async (ctx, { state }) => {
+    async (ctx, { state, flowDynamic }) => {
       await state.update({ fecha: ctx.body });
+      await flowDynamic(`Fecha elegida ${ctx.body}`);
     }
   )
   .addAnswer(
     "Ingresa horario *HH:MM*",
     { capture: true },
-    async (ctx, { state }) => {
+    async (ctx, { state, flowDynamic }) => {
       await state.update({ horario: ctx.body });
+      await flowDynamic(`Horario elegido ${ctx.body}`);
     }
   )
   .addAnswer(
     "Gracias por tus datos",
     null,
-    async (ctx, { flowDynamic, state }) => {
+    async (_, { flowDynamic, state, endFlow }) => {
+      
+      const datos = state.getMyState();
       const turno = {
-        nomyape: state.get("nomyape"),
-        fecha: state.get("fecha"),
-        horario: state.get("horario"),
+        nombre: datos.nomyape,
+        fecha: datos.fecha,
+        horario: datos.horario,
       };
-      await flowDynamic(`DATOS INGRESADOS${(nomyape, fecha, horario)}`);
-      console.log(turno);
+      await flowDynamic(
+        `DATOS INGRESADOS${turno.nombre + turno.fecha + turno.horario}`
+      );
     }
   );
 
