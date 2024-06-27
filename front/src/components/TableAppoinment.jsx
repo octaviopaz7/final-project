@@ -114,7 +114,7 @@ const Table = ({ appointments }) => {
                   </td>
                   <td>{appointment.appointmentType}</td>
                   <td className="table-actions">
-                    <Button
+                    {/*<Button
                       className="btn btn-table"
                       onClick={() => handleShowUpdateModal(appointment._id)}
                     >
@@ -124,7 +124,7 @@ const Table = ({ appointments }) => {
                       show={showUpdateModal}
                       handleClose={handleCloseUpdateModal}
                       appointmentId={selectedAppointment}
-                    />
+                    />*/}
                     <Button
                       className="btn btn-table basic-btn"
                       onClick={() => handleShow(appointment)}

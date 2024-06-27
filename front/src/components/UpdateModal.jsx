@@ -15,6 +15,7 @@ const UpdateModal = ({ show, handleClose, appointmentId }) => {
     const [appointmentType, setAppointmentType] = useState('');
     const [date, setDate] = useState(new Date());
     const [selectedTime, setSelectedTime] = useState(null);
+
     const { token } = useAuth();
     const { fetchAppointments } = useAppointments();
 
