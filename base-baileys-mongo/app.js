@@ -30,53 +30,73 @@ const verificarTurno = async (numeroCelular) => {
   }
 };
 
-const flowCancelarTurno = addKeyword("###_CANCELAR_TURNO_###")
-  .addAnswer("Verificando si tienes un turno programado...", { delay: 1000 })
-  .addAnswer(
-    async (ctx, { flowDynamic, fallBack }) => {
-      const turno = await verificarTurno(ctx.from);
-      if (turno && turno.status === "Pendiente") {
-        await flowDynamic(
-          `Tienes un turno para el día ${turno.date}, en el horario ${turno.hour}. ¿Seguro que quieres cancelarlo? *Si* o *No*`,
-          { capture: true }
-        );
-      } else if (turno === null) {
-        return fallBack("Error al verificar el turno. Inténtalo de nuevo más tarde.");
-      } else {
-        return fallBack("No tienes registrado un turno aún.");
+const cancelarTurno = async (numeroCelular) => {
+  try {
+    const respuesta = await axios.put(
+      `http://localhost:5000/api/appointments/phone/${numeroCelular}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
       }
-    }
-  )
-  .addAnswer(
-    async (ctx, { flowDynamic }) => {
-      if (ctx.body.toLowerCase() === "si") {
-        try {
-          await axios.put(
-            `http://localhost:3000/api/appointments/phone/${ctx.from}`,
-            {
-              headers: {
-                "Content-Type": "application/json",
-              },
-              withCredentials: true,
-            }
-          );
-          return await flowDynamic("¡Tu turno fue cancelado con éxito!");
-        } catch (error) {
-          console.error("Error al cancelar el turno:", error);
-          return await flowDynamic("Hubo un problema al cancelar tu turno. Inténtalo de nuevo más tarde.");
-        }
-      } else {
-        const turno = await verificarTurno(ctx.from);
-        return await flowDynamic(
-          `Tienes un turno para el día ${turno.date}, en el horario ${turno.hour}`
-        );
-      }
-    }
-  );
+    );
+    return respuesta.data;
+  } catch (error) {
+    console.error("Error al cancelar el turno:", error);
+    return null;
+  }
+};
 
-const flowVerificarTurno = addKeyword("###_VERIFICAR_TURNO_###").addAnswer(
-  "Verificando si posees un turno...",
+const flowCancelarTurno = addKeyword("###CANCELAR_TURNO###").addAnswer(
+  "Verificando si tienes un turno programado...",
   { delay: 1000 },
+  async (ctx, { flowDynamic }) => {
+    const turno = await verificarTurno(ctx.from);
+    if (turno && turno.status === "Pendiente") {
+      await flowDynamic(
+       ` Tienes un turno para el día ${turno.date}, en el horario ${turno.hour}. ¿Seguro que quieres cancelarlo? *Si* o *No*`
+      ,{ capture: true }, { delay: 4000 });
+      const resultado = await cancelarTurno(ctx.from);
+      if (resultado) {
+        return await flowDynamic("¡Tu turno fue cancelado con éxito!");
+      } else {
+        return await flowDynamic(
+          "Hubo un problema al cancelar tu turno. Inténtalo de nuevo más tarde."
+        );
+      }
+    } else if (turno === null) {
+      return await flowDynamic(
+        "Error al verificar el turno. Inténtalo de nuevo más tarde."
+      );
+    } else {
+      return await flowDynamic("No tienes registrado un turno aún.");
+    }
+  }
+).addAction(
+  { capture: true },
+  async (ctx, { flowDynamic, endFlow, fallBack }) => {
+    console.log(ctx.body)
+    if (ctx.body.toLowerCase() === "si") {
+      const resultado = await cancelarTurno(ctx.from);
+      if (resultado) {
+        return await flowDynamic("¡Tu turno fue cancelado con éxito!");
+      } else {
+        return await flowDynamic(
+          "Hubo un problema al cancelar tu turno. Inténtalo de nuevo más tarde."
+        );
+      }
+    } else if (ctx.body.toLowerCase() === "no") {
+      return endFlow("No se ha cancelado tu turno.");
+    } else {
+      return fallBack("Por favor, responde con Si o No.");
+    }
+  }
+);
+
+const flowVerificarTurno = addKeyword("###VERIFICAR_TURNO###").addAnswer(
+  "Verificando si posees un turno...",
+  { delay: 3000 },
   async (ctx, { flowDynamic }) => {
     const turno = await verificarTurno(ctx.from);
     if (turno && turno.status === "Pendiente") {
@@ -84,14 +104,16 @@ const flowVerificarTurno = addKeyword("###_VERIFICAR_TURNO_###").addAnswer(
         `Tienes un turno para el día ${turno.date}, en el horario ${turno.hour}`
       );
     } else if (turno === null) {
-      return await flowDynamic("Error al verificar el turno. Inténtalo de nuevo más tarde.");
+      return await flowDynamic(
+        "Error al verificar el turno. Inténtalo de nuevo más tarde."
+      );
     } else {
       return await flowDynamic("No tienes registrado un turno aún.");
     }
   }
 );
 
-const flowSolicitarTurno = addKeyword("###_SOLICITAR_TURNO_###")
+const flowSolicitarTurno = addKeyword("###SOLICITAR_TURNO###")
   .addAnswer(
     "Ingresa tu nombre y apellido",
     { capture: true },
@@ -119,7 +141,7 @@ const flowSolicitarTurno = addKeyword("###_SOLICITAR_TURNO_###")
     }
   )
   .addAnswer(
-    "Ingresa horario *HH:MM*",
+    "Ingresa horario HH:MM",
     { capture: true },
     async (ctx, { globalState, flowDynamic, fallBack }) => {
       const horarioIngresado = ctx.body.trim();
@@ -146,7 +168,7 @@ const flowSolicitarTurno = addKeyword("###_SOLICITAR_TURNO_###")
       }
       await globalState.update({ horario: ctx.body });
       await flowDynamic([
-        `Ingresa *si* para confirmar el turno para el día *${
+        `Ingresa si para confirmar el turno para el día *${
           globalState.getMyState().fecha
         }* a las *${globalState.getMyState().horario}*`,
       ]);
@@ -160,7 +182,6 @@ const flowSolicitarTurno = addKeyword("###_SOLICITAR_TURNO_###")
         phone: globalState.getMyState().phone,
         date: globalState.getMyState().fecha,
         hour: globalState.getMyState().horario,
-  
       };
 
       if (ctx.body.toLowerCase() === "si") {
@@ -168,16 +189,23 @@ const flowSolicitarTurno = addKeyword("###_SOLICITAR_TURNO_###")
           await axios.post("http://localhost:5000/api/appointments", turno, {
             withCredentials: true,
           });
-          return await flowDynamic([`Tu turno ha sido confirmado!`,` Te esperamos el día ${globalState.getMyState().fecha} a las ${globalState.getMyState().horario}`]);
+          return await flowDynamic([
+            `Tu turno ha sido confirmado!`,
+            ` Te esperamos el día ${globalState.getMyState().fecha} a las ${
+              globalState.getMyState().horario
+            }`,
+          ]);
         } catch (error) {
           console.error("Error al confirmar el turno:", error);
-          return await flowDynamic("Hubo un problema al confirmar tu turno. Inténtalo de nuevo más tarde.");
+          return await flowDynamic(
+            "Hubo un problema al confirmar tu turno. Inténtalo de nuevo más tarde."
+          );
         }
       } else if (ctx.body.toLowerCase() === "no") {
         return endFlow("Cancelando turno");
       } else {
         return fallBack(
-          "Ingresaste una opción incorrecta, recordá ingresar *si* o *no*"
+          "Ingresaste una opción incorrecta, recordá ingresar si o no"
         );
       }
     }
@@ -186,9 +214,9 @@ const flowSolicitarTurno = addKeyword("###_SOLICITAR_TURNO_###")
 const flowDefault = addKeyword(EVENTS.WELCOME).addAnswer(
   [
     "Bienvenido a la Clinica Odontologica 🦷 te detallo a continuación las opciones!",
-    "*1-Solicitar turno* 📅",
-    "*2-Verificar turno* ✔",
-    "*3-Cancelar Turno* ❌"
+    "1-Solicitar turno 📅",
+    "2-Verificar turno ✔",
+    "3-Cancelar Turno ❌",
   ],
   { capture: true },
   async (ctx, { fallBack, gotoFlow, globalState }) => {
@@ -210,12 +238,18 @@ const flowDefault = addKeyword(EVENTS.WELCOME).addAnswer(
     }
   }
 );
+
 const main = async () => {
   const adapterDB = new MongoAdapter({
     dbUri: MONGO_DB_URI,
     dbName: MONGO_DB_NAME,
   });
-  const adapterFlow = createFlow([flowDefault, flowSolicitarTurno, flowVerificarTurno, flowCancelarTurno]);
+  const adapterFlow = createFlow([
+    flowDefault,
+    flowSolicitarTurno,
+    flowVerificarTurno,
+    flowCancelarTurno,
+  ]);
   const adapterProvider = createProvider(BaileysProvider);
   createBot({
     flow: adapterFlow,
@@ -232,3 +266,4 @@ const main = async () => {
 };
 
 main();
+

@@ -21,7 +21,9 @@ const AddForm = ({ fetchAppointments }) => {
   const handleSubmit = async (values, { resetForm }) => {
     const appointmentData = {
       ...values,
-      date: `${selectedDate.getDay}/${selectedDate.get}/${year}`,
+      date: `${selectedDate.getDate()}/${
+        selectedDate.getMonth() + 1
+      }/${selectedDate.getFullYear()}`,
       hour: selectedTime,
     };
 

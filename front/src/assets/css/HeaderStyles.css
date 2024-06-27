@@ -2,7 +2,9 @@
 .navbar {
     background-color: #3d367a; 
 }
-
+.offcanvas-body, .offcanvas-header{
+    background-color: #3d367a;
+}
 /* Estilos para los enlaces de navegación */
 .nav-link-item {
     color: white; 

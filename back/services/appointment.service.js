@@ -28,10 +28,10 @@ export const getAppointments = async () => {
 export const getAppointmentById = async (id) => {
   return await Appointment.findById(id);
 };
+
 export const getAppointmentByPhone = async (phone) => {
   return await Appointment.findOne({ phone: phone });
 };
-
 
 export const updateStatusAppointment = async (id, newStatus) => {
   try {
@@ -51,3 +51,19 @@ export const updateStatusAppointment = async (id, newStatus) => {
 export const deleteAppointment = async (id) => {
   return await Appointment.findByIdAndDelete(id);
 };
+
+export const updateAppointment = async (id, appointmentData) => {
+  try {
+    const updatedAppointment = await Appointment.findByIdAndUpdate(
+      id,
+      appointmentData,
+      { new: true, runValidators: true }
+    );
+
+    return updatedAppointment;
+  } catch (error) {
+    console.error("Error al actualizar la cita:", error);
+    throw new Error(error.message);
+  }
+};
+

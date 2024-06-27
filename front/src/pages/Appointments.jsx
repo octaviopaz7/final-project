@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Container, Row } from 'react-bootstrap';
 import AddForm from "../components/AddForm";
 import Table from "../components/TableAppoinment";
@@ -25,11 +25,11 @@ const Appointments = () => {
             <section className="appointment-section d-flex flex-column align-items-center justify-content-center">
                 <Row className='w-100 py-5'>
                     <h2 className="text-center subtitle">Agregar Turno</h2>
-                    <AddForm fetchAppointments={fetchAppointments} />
+                    <AddForm fetchAppointments={fetchAppointments} /> 
                 </Row>
                 <Row className='py-5'>
                     <h2 className="text-center subtitle">Lista de turnos</h2>
-                    <Table fetchAppointments={fetchAppointments} appointments={appointments} />
+                    <Table appointments={appointments} /> 
                 </Row>
             </section>
         </Container>

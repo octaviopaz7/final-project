@@ -10,11 +10,10 @@ import { useAppointments } from '../context/AppointmentsContext';
 registerLocale('es', es);
 
 const UpdateModal = ({ show, handleClose, appointmentId }) => {
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
+    const [name, setname] = useState('');
     const [phone, setPhone] = useState('');
     const [appointmentType, setAppointmentType] = useState('');
-    const [dateAppointment, setDateAppointment] = useState(new Date());
+    const [date, setDate] = useState(new Date());
     const [selectedTime, setSelectedTime] = useState(null);
     const { token } = useAuth();
     const { fetchAppointments } = useAppointments();
@@ -26,13 +25,12 @@ const UpdateModal = ({ show, handleClose, appointmentId }) => {
                     const response = await axios.get(`http://localhost:5000/api/appointments/${appointmentId}`, {
                         headers: { Authorization: `Bearer ${token}` }
                     });
-                    const { firstName, lastName, phone, appointmentType, dateAppointment } = response.data;
-                    setFirstName(firstName);
-                    setLastName(lastName);
+                    const { name, phone, appointmentType, date } = response.data;
+                    setname(name);
                     setPhone(phone);
                     setAppointmentType(appointmentType);
-                    const appointmentDate = new Date(dateAppointment);
-                    setDateAppointment(appointmentDate);
+                    const appointmentDate = new Date(date);
+                    setDate(appointmentDate);
                     setSelectedTime(appointmentDate);
                 } catch (error) {
                     console.error('Error fetching appointment details:', error);
@@ -49,11 +47,10 @@ const UpdateModal = ({ show, handleClose, appointmentId }) => {
         event.preventDefault();
         try {
             const updatedAppointment = {
-                firstName,
-                lastName,
+                name,
                 phone,
                 appointmentType,
-                dateAppointment: combineDateAndTime(dateAppointment, selectedTime).toISOString(),
+                date: combineDateAndTime(date, selectedTime).toISOString(),
             };
 
             const response = await axios.put(`http://localhost:5000/api/appointments/${appointmentId}`, updatedAppointment, {
@@ -75,7 +72,7 @@ const UpdateModal = ({ show, handleClose, appointmentId }) => {
     };
 
     const handleDateChange = (date) => {
-        setDateAppointment(date);
+        setDate(date);
     };
 
     const handleTimeChange = (event) => {
@@ -111,24 +108,16 @@ const UpdateModal = ({ show, handleClose, appointmentId }) => {
             </Modal.Header>
             <Modal.Body>
                 <Form onSubmit={handleUpdate}>
-                    <Form.Group className="mb-3" controlId="formFirstName">
+                    <Form.Group className="mb-3" controlId="formname">
                         <Form.Label>Nombre</Form.Label>
                         <Form.Control
                             type="text"
-                            value={firstName}
-                            onChange={(e) => setFirstName(e.target.value)}
+                            value={name}
+                            onChange={(e) => setname(e.target.value)}
                             required
                         />
                     </Form.Group>
-                    <Form.Group className="mb-3" controlId="formLastName">
-                        <Form.Label>Apellido</Form.Label>
-                        <Form.Control
-                            type="text"
-                            value={lastName}
-                            onChange={(e) => setLastName(e.target.value)}
-                            required
-                        />
-                    </Form.Group>
+                    
                     <Form.Group className="mb-3" controlId="formPhone">
                         <Form.Label>Teléfono</Form.Label>
                         <Form.Control
@@ -156,10 +145,10 @@ const UpdateModal = ({ show, handleClose, appointmentId }) => {
                     </Form.Group>
                     <Row>
                         <Col md="6">
-                            <Form.Group className="mb-3" controlId="formDateAppointment">
+                            <Form.Group className="mb-3" controlId="formDate">
                                 <Form.Label>Fecha de la cita</Form.Label>
                                 <DatePicker
-                                    selected={dateAppointment}
+                                    selected={date}
                                     onChange={handleDateChange}
                                     dateFormat="dd/MM/yyyy"
                                     locale="es"
