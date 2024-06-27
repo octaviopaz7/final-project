@@ -30,7 +30,18 @@ export const getAppointmentById = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
-
+export const getAppointmentByPhone = async (req, res) => {
+    try {
+        const appointment = await appointmentsService.getAppointmentByPhone(req.params.phone);
+        if (appointment.status !== "Cancelado" || appointment.status !== "Completado" || appointment.status == null){
+            res.status(200).json(appointment); 
+        } else {
+            res.status(404).json({ message: 'Turno no encontrado' });
+        }
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
 export const updateAppointment = async (req, res) => {
     try {
         const appointment = await appointmentsService.updateAppointment(req.params.id, req.body);
@@ -43,6 +54,19 @@ export const updateAppointment = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+export const cancelAppointmentByNumber = async (req, res) => {
+    try {
+        const appointment = await appointmentsService.getAppointmentByPhone(req.params.number);
+        if (!appointment) {
+            return res.status(404).json({ message: 'Turno no encontrado' });
+        }
+        const updatedAppointment = await appointmentsService.updateStatusAppointment(appointment.id, "Cancelado");
+        res.status(200).json(updatedAppointment);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 export const updateStatusAppointment = async (req, res) => {
     try {
         const updatedAppointment = await appointmentsService.updateStatusAppointment(req.params.id, req.body.status);
