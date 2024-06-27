@@ -16,19 +16,21 @@ const PORT = process.env.PORT || 5000;
 app.use(morgan('dev'));
 app.use(cookieParser());
 app.use(express.json())
+const allowedOrigins = ['http://localhost:5000', 'http://localhost:5173'];
 
-// const corsOptions = {
-//     origin: 'http://localhost:5173',
-//     credentials: true, 
-//     methods: ['GET', 'POST', 'PUT', 'DELETE'],
-//     allowedHeaders: ['Content-Type', 'Authorization'], 
-// };
 const corsOptions = {
-    origin: 'http://localhost:3000',
-    credentials: true, 
+    origin: (origin, callback) => {
+        if (allowedOrigins.includes(origin) || !origin) {
+            callback(null, true);
+        } else {
+            callback(new Error('No permitido por CORS'));
+        }
+    },
+    credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'], 
+    allowedHeaders: ['Content-Type', 'Authorization'],
 };
+
 app.use(cors(corsOptions));
 
 app.use('/api/auth', authRoutes);

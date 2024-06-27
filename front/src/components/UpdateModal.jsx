@@ -23,7 +23,7 @@ const UpdateModal = ({ show, handleClose, appointmentId }) => {
         const fetchAppointmentDetails = async () => {
             if (appointmentId) {
                 try {
-                    const response = await axios.get(`http://localhost:3000/api/appointments/${appointmentId}`, {
+                    const response = await axios.get(`http://localhost:5000/api/appointments/${appointmentId}`, {
                         headers: { Authorization: `Bearer ${token}` }
                     });
                     const { firstName, lastName, phone, appointmentType, dateAppointment } = response.data;
@@ -56,7 +56,7 @@ const UpdateModal = ({ show, handleClose, appointmentId }) => {
                 dateAppointment: combineDateAndTime(dateAppointment, selectedTime).toISOString(),
             };
 
-            const response = await axios.put(`http://localhost:3000/api/appointments/${appointmentId}`, updatedAppointment, {
+            const response = await axios.put(`http://localhost:5000/api/appointments/${appointmentId}`, updatedAppointment, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             await fetchAppointments();

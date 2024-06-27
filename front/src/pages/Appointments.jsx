@@ -9,7 +9,7 @@ const Appointments = () => {
 
     const fetchAppointments = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/api/appointments',  { credentials:"include" });
+            const response = await axios.get('http://localhost:5000/api/appointments', { credentials: "include" });
             setAppointments(response.data);
         } catch (error) {
             console.error('Error fetching appointments:', error);
@@ -29,7 +29,7 @@ const Appointments = () => {
                 </Row>
                 <Row className='py-5'>
                     <h2 className="text-center subtitle">Lista de turnos</h2>
-                    <Table appointments={appointments} />
+                    <Table fetchAppointments={fetchAppointments} appointments={appointments} />
                 </Row>
             </section>
         </Container>
@@ -37,4 +37,3 @@ const Appointments = () => {
 };
 
 export default Appointments;
-

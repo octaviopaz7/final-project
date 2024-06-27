@@ -8,7 +8,7 @@ const ContactTable = () => {
 
     const fetchContacts = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/api/contact',  { credentials:"include" });
+            const response = await axios.get('http://localhost:5000/api/contact',  { credentials:"include" });
             setContacts(response.data);
         } catch (error) {
             console.error('Error trayendo los mensajes de contacto', error);

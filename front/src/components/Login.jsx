@@ -11,7 +11,7 @@ const Login = ({ show, handleClose }) => {
     const handleLogin = async (event) => {
         event.preventDefault();
         try {
-            const response = await fetch('http://localhost:3000/api/auth/login', {
+            const response = await fetch('http://localhost:5000/api/auth/login', {
                 method: 'POST',
                 credentials: 'include', 
                 headers: {

@@ -34,7 +34,7 @@ body {
 .services-section,
 .aboutUs-section,
 .appointment-section {
-    min-height: 80vh;
+    min-height: 120vh;
 }
 
 /* Estilos para botones */

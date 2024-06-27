@@ -7,7 +7,7 @@ const DeleteModal = ({ show, handleClose, appointmentId }) => {
 
     const handleDelete = async () => {
         try {
-            const response = await axios.delete(`http://localhost:3000/api/appointments/${appointmentId}`, {
+            const response = await axios.delete(`http://localhost:5000/api/appointments/${appointmentId}`, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
