@@ -56,7 +56,7 @@ export const updateAppointment = async (req, res) => {
 };
 export const cancelAppointmentByNumber = async (req, res) => {
     try {
-        const appointment = await appointmentsService.getAppointmentByPhone(req.params.number);
+        const appointment = await appointmentsService.getAppointmentByPhone(req.params.phone);
         if (!appointment) {
             return res.status(404).json({ message: 'Turno no encontrado' });
         }
@@ -66,6 +66,7 @@ export const cancelAppointmentByNumber = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
 
 export const updateStatusAppointment = async (req, res) => {
     try {

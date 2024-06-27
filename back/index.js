@@ -5,9 +5,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import appointmentsRoutes from './routes/appointment.routes.js'
-import professionalsRoutes from './routes/professional.routes.js'
 import servicesRoutes from './routes/service.routes.js'
-import patientsRoutes from './routes/patient.routes.js'
 import authRoutes from './routes/auth.routes.js'
 import contactRoutes from './routes/contact.routes.js'
 
@@ -36,9 +34,7 @@ app.use(cors(corsOptions));
 app.use('/api/auth', authRoutes);
 
 app.use('/api/appointments', appointmentsRoutes);
-app.use('/api/professionals', professionalsRoutes);
 app.use('/api/services', servicesRoutes);
-app.use('/api/patients', patientsRoutes);
 app.use('/api/contact', contactRoutes);
 
 mongoose.connect(process.env.MONGODB_URI)

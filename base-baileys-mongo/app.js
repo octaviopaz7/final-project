@@ -26,7 +26,7 @@ const verificarTurno = async (numeroCelular) => {
 };
 
 const flowCancelarTurno = addKeyword("###_CANCELAR_TURNO_###").addAnswer(
-  "¿Seguro que quieres cancelar tu turno? *si* o *no*",
+  "¿Seguro que quieres cancelar un turno? *Si* o *No*",
   { capture: true },
   async (ctx, { flowDynamic }) => {
     if (ctx.body.toLowerCase() == "si") {
@@ -39,7 +39,7 @@ const flowCancelarTurno = addKeyword("###_CANCELAR_TURNO_###").addAnswer(
           withCredentials: true,
         }
       );
-      return await flowDynamic("Tu turno fue cancelado!");
+      return await flowDynamic("¡Tu turno fue cancelado con éxito!");
     } else {
       await axios.get(
         `http://localhost:5000/api/appointments/phone/${ctx.from}`
@@ -53,7 +53,7 @@ const flowCancelarTurno = addKeyword("###_CANCELAR_TURNO_###").addAnswer(
 
 const flowVerificarTurno = addKeyword("###_VERIFICAR_TURNO_###").addAnswer(
   "Verificando si posees un turno..",
-  { delay: 3000 },
+  { delay: 1000 },
   async (ctx, { flowDynamic }) => {
     if (verificarTurno(ctx.from).includes("registrado")) {
       return await flowDynamic("No registra turnos.");
@@ -87,7 +87,6 @@ const flowSolicitarTurno = addKeyword("###_SOLICITAR_TURNO_###")
         );
       }
       await globalState.update({ fecha: fechaIngresada, phone: ctx.from });
-      await flowDynamic(`Fecha elegida ${fechaIngresada}`);
     }
   )
   .addAnswer(
@@ -118,7 +117,6 @@ const flowSolicitarTurno = addKeyword("###_SOLICITAR_TURNO_###")
       }
       await globalState.update({ horario: ctx.body });
       await flowDynamic([
-        `Horario elegido ${ctx.body}`,
         `Ingresa *si* para confirmar el turno para el día *${
           globalState.getMyState().fecha
         }* a las *${globalState.getMyState().horario}*`,
@@ -133,6 +131,7 @@ const flowSolicitarTurno = addKeyword("###_SOLICITAR_TURNO_###")
         phone: globalState.getMyState().phone,
         date: globalState.getMyState().fecha,
         hour: globalState.getMyState().horario,
+  
       };
 
       if (ctx.body.toLowerCase() === "si") {
