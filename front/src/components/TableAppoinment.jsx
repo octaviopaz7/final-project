@@ -172,7 +172,7 @@ const Table = ({ appointments }) => {
           </table>
         </>
       ) : (
-        <h3 className="text-center">No hay turnos disponibles</h3>
+        <h3 className="text-center">No hay turnos agendados</h3>
       )}
     </>
   );

@@ -32,11 +32,11 @@ export const getAppointmentById = async (req, res) => {
 };
 export const getAppointmentByPhone = async (req, res) => {
     try {
-        const appointment = await appointmentsService.getAppointmentByPhone(req.params.phone);
-        if (appointment.status !== "Cancelado" || appointment.status !== "Completado" || appointment.status == null){
-            res.status(200).json(appointment); 
+        const appointments = await appointmentsService.getAppointmentByPhone(req.params.phone);
+        if (appointments) {
+            res.status(200).json(appointments); 
         } else {
-            res.status(404).json({ message: 'Turno no encontrado' });
+            res.status(404).json({ message: 'No se encontró un turno pendiente para ese teléfono' });
         }
     } catch (error) {
         res.status(500).json({ error: error.message });

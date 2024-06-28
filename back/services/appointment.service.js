@@ -30,7 +30,7 @@ export const getAppointmentById = async (id) => {
 };
 
 export const getAppointmentByPhone = async (phone) => {
-  return await Appointment.findOne({ phone: phone });
+  return await Appointment.findOne({ phone: phone, status: "Pendiente" });
 };
 
 export const updateStatusAppointment = async (id, newStatus) => {
@@ -66,4 +66,3 @@ export const updateAppointment = async (id, appointmentData) => {
     throw new Error(error.message);
   }
 };
-
