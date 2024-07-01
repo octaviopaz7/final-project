@@ -34,7 +34,9 @@ body {
 .services-section,
 .aboutUs-section,
 .appointment-section {
-    min-height: 120vh;
+    min-height: 80vh;
+    padding: 8% 0;
+    
 }
 
 /* Estilos para botones */
@@ -63,8 +65,18 @@ body {
     border: 2px solid #D7F39E;
 
 }
+.error-section{
+    background-color: #28136e;
+}
+.error-title{
+    color: white;
+}
 
-.contact-title {
+.error-text{
+    color:#D7F39E
+}
+
+.contact-title, .error-title {
     font-size: 3rem;
     font-weight: 800;
 }

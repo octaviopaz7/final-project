@@ -1,6 +1,6 @@
 import * as usersService from '../services/user.service.js';
 import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv'
+import dotenv from 'dotenv';
 
 dotenv.config();
 const SECRET_KEY = process.env.SECRET_KEY;
@@ -35,26 +35,28 @@ export const register = async (req, res) => {
     }
 };
 
-
 export const login = async (req, res) => {
     try {
         const { email, password } = req.body;
         const user = await usersService.getUserByEmail(email);
-        if (!user) return res.status(400).json({ message: "No hay una cuenta asociada a ese correo electronico. Intente nuevamente" });
+        if (!user) return res.status(400).json({ message: "No hay una cuenta asociada a ese correo electrónico. Intente nuevamente" });
 
         const validPassword = await usersService.comparePassword(password, user.password);
         if (!validPassword) return res.status(400).json({ message: "Contraseña incorrecta" });
 
         const token = createToken(user);
-        res.cookie("token", token, { httpOnly: true });
-        console.log(token)
-        res.status(201).json({ message: "Usuario loggeado exitosamente" });
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 3600000 // 1 hora
+        });
+        res.status(201).json({ message: "Usuario logueado exitosamente" });
     } catch (error) {
+        console.error("Error al iniciar sesión:", error);
         res.status(500).json({ message: "Error al iniciar sesión. Intente nuevamente" });
     }
 };
-
-
 
 export const logout = (req, res) => {
     res.clearCookie("token", { path: '/' });
@@ -62,5 +64,21 @@ export const logout = (req, res) => {
 };
 
 export const getUserInfo = (req, res) => {
-    res.status(200).json(req.user);
+    try {
+        const token = req.cookies.token;
+        if (!token) return res.status(401).json({ message: "No autenticado" });
+
+        const decoded = jwt.verify(token, SECRET_KEY);
+        const user = {
+            id: decoded.id,
+            email: decoded.email,
+            firstName: decoded.firstName,
+            lastName: decoded.lastName
+        };
+
+        res.status(200).json(user);
+    } catch (error) {
+        console.error("Error al obtener la información del usuario:", error);
+        res.status(401).json({ message: "Token inválido" });
+    }
 };

@@ -1,36 +1,30 @@
 import { useState } from "react";
 import { Button, Form, Modal } from 'react-bootstrap';
 import axios from 'axios';
-import { useAuth } from '../context/AuthContext'; 
+import { useAuth } from '../context/AuthContext';
+import { Navigate } from 'react-router-dom'; // Importa Navigate desde react-router-dom
 
 const Login = ({ show, handleClose }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const { login } = useAuth();
+    const [loginError, setLoginError] = useState(null);
+    const [redirectToAdmin, setRedirectToAdmin] = useState(false); // Estado para redirigir al HomeAdmin
 
     const handleLogin = async (event) => {
         event.preventDefault();
-        try {
-            const response = await fetch('http://localhost:5000/api/auth/login', {
-                method: 'POST',
-                credentials: 'include', 
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email, password }),
-            });
-    
-            if (response.status === 201) {
-                login(); 
-                handleClose(); 
-            } else {
-                console.error('Error durante el inicio de sesión:', response.statusText);
-            }
-        } catch (error) {
-            console.error('Error durante el inicio de sesión:', error);
+        const { success, error } = await login(email, password);
+        if (success) {
+            setRedirectToAdmin(true); 
+            handleClose(); 
+        } else {
+            setLoginError(error || 'Error durante el inicio de sesión'); 
         }
     };
-    
+
+    if (redirectToAdmin) {
+        return <Navigate to="/" />;
+    }
 
     return (
         <Modal show={show} onHide={handleClose}>
@@ -40,7 +34,7 @@ const Login = ({ show, handleClose }) => {
             <Modal.Body>
                 <Form onSubmit={handleLogin}>
                     <Form.Group className="mb-3" controlId="formEmail">
-                        <Form.Label>Correo electronico</Form.Label>
+                        <Form.Label>Correo electrónico</Form.Label>
                         <Form.Control
                             type="email"
                             value={email}
@@ -58,17 +52,18 @@ const Login = ({ show, handleClose }) => {
                         />
                     </Form.Group>
                     <div className="d-flex justify-content-center">
-                    <Button className="basic-btn" type="submit">
-                        Iniciar Sesión
-                    </Button>
+                        <Button className="basic-btn" type="submit">
+                            Iniciar Sesión
+                        </Button>
                     </div>
+                    {loginError && (
+                        <div className="text-danger text-center mt-2">{loginError}</div>
+                    )}
                 </Form>
             </Modal.Body>
-    
         </Modal>
     );
 };
 
 export default Login;
-
 

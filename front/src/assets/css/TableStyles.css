@@ -16,11 +16,7 @@
 .table-striped > tbody > tr.table-row:nth-of-type(odd) > * {
   --bs-table-bg-type: #44339cc9;
 }
-.table > tbody > tr:hover > * {
-  background-color: #d7f39e;
-  color: #170d35;
-  font-weight: 600;
-}
+
 
 .btn-table {
   background-color: #170d35;
@@ -52,4 +48,23 @@
   font-size: 2rem;
   font-weight: 700;
   text-align: center;
+}
+
+.form-check-input {
+  font-size: 1.7rem;
+  background-color:#d7f39e;
+  border: 2px solid #170d35;
+}
+.modal-body select.form-select, option, td .form-select{
+  background-color: #d7f39e;
+  color:#170d35;
+  font-weight: 500;
+}
+.modal-body .form-control{
+  color: #d7f39e;
+}
+.form-check-input:checked{
+  background-color:#170d35;
+  border: 2px solid #d7f39e;
+ 
 }

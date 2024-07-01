@@ -34,6 +34,12 @@ const ContactSection = () => {
 
             if (response.ok) {
                 console.log('Formulario enviado con éxito');
+                setFormData({
+                    name: '',
+                    email: '',
+                    service: '',
+                    message: ''
+                });
             } else {
                 console.error('Error al enviar el formulario');
             }

@@ -1,5 +1,5 @@
 import ContactTable from "../components/ContactTable";
-import {Container, Row} from "react-bootstrap"
+import {Row} from "react-bootstrap"
 const Contact = () => {
   return (
     <>

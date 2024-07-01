@@ -8,8 +8,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import es from "date-fns/locale/es";
 
 const AddForm = ({ fetchAppointments }) => {
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [selectedTime, setSelectedTime] = useState(null);
+  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedTime, setSelectedTime] = useState("");
 
   const schema = yup.object().shape({
     name: yup.string().required("Nombre es requerido"),
@@ -19,22 +19,23 @@ const AddForm = ({ fetchAppointments }) => {
   });
 
   const handleSubmit = async (values, { resetForm }) => {
-    const appointmentData = {
-      ...values,
-      date: `${selectedDate.getDate()}/${
-        selectedDate.getMonth() + 1
-      }/${selectedDate.getFullYear()}`,
-      hour: selectedTime,
-    };
-
     try {
+      const appointmentData = {
+        ...values,
+        date: `${selectedDate.getDate()}/${
+          selectedDate.getMonth() + 1
+        }/${selectedDate.getFullYear()}`,
+        hour: selectedTime,
+      };
+
       await axios.post(
         "http://localhost:5000/api/appointments",
         appointmentData,
         { withCredentials: true }
       );
+
+      await fetchAppointments();
       resetForm();
-      fetchAppointments();
     } catch (error) {
       console.error("Error al agregar turno:", error);
     }
@@ -48,6 +49,7 @@ const AddForm = ({ fetchAppointments }) => {
     const time = event.target.value;
     setSelectedTime(time);
   };
+
   const generateTimes = () => {
     const times = [];
     const intervals = [

@@ -5,8 +5,10 @@ const contactSchema = new mongoose.Schema({
     email: { type: String, required: true },
     service: { type: String },
     message: { type: String, required: true },
-    createdAt: { type: Date, default: Date.now }
+    createdAt: { type: Date, default: Date.now },
+    answered: { type: Boolean, default: false }
 });
+
 
 const Contact = mongoose.model('Contact', contactSchema);
 

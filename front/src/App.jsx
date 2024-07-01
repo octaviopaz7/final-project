@@ -29,8 +29,11 @@ function App() {
                 <Page><Appointments /></Page>
               </ProtectedRoute>
             } />
-            <Route path={users} element={<ProtectedRoute><Page><RegisterUser/></Page></ProtectedRoute>} />
-            <Route path={contact} element={<Page><Contact /></Page>} />
+            <Route path={contact} element={
+              <ProtectedRoute>
+              <Page><Contact /></Page>
+              </ProtectedRoute>
+              } />
             <Route path="*" element={<Page><Error /></Page>} />
           </Routes>
         </BrowserRouter>

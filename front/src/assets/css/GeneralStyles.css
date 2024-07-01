@@ -16,12 +16,9 @@
     width: 20rem;
     border-radius: 25px;
 }
-
-/* Efecto hover del botón de formulario de agregar */
-.btn-form-add:hover {
-    color: #c49ef3;
-    background-color: #1900ff;
-    border: 2px solid #c49ef3;
+.btn-form-add:hover{
+   color: #3d367a;
+   background-color: #D7F39E;
 }
 
 /* Etiquetas de formulario de agregar */

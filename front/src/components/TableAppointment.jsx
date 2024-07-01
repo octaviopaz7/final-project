@@ -5,14 +5,15 @@ import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import UpdateModal from "./UpdateModal";
 
-const TableAppoinment = ({ appointments }) => {
+const TableAppointment = ({ appointments }) => {
   const [show, setShow] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [appointmentsData, setAppointmentsData] = useState(appointments);
+
   const handleClose = () => setShow(false);
-  const handleShow = (appointmentId) => {
-    setSelectedAppointment(appointmentId);
+  const handleShow = (appointment) => {
+    setSelectedAppointment(appointment);
     setShow(true);
   };
 
@@ -93,7 +94,6 @@ const TableAppoinment = ({ appointments }) => {
     }
   };
 
-
   useEffect(() => {
     fetchAppointments();
   }, []);
@@ -101,7 +101,6 @@ const TableAppoinment = ({ appointments }) => {
   return (
     <>
       {appointmentsData && appointmentsData.length > 0 ? (
-        <>
         <div>
           <Table className="table table-striped table-dark caption-top" responsive="md">
             <thead>
@@ -141,7 +140,7 @@ const TableAppoinment = ({ appointments }) => {
                   </td>
                   <td>{appointment.appointmentType}</td>
                   <td className="table-actions">
-                    {/*<Button
+                    <Button
                       className="btn btn-table"
                       onClick={() => handleShowUpdateModal(appointment._id)}
                     >
@@ -151,7 +150,8 @@ const TableAppoinment = ({ appointments }) => {
                       show={showUpdateModal}
                       handleClose={handleCloseUpdateModal}
                       appointmentId={selectedAppointment}
-                    />*/}
+                      handleAddAppointment={fetchAppointments}
+                    />
                     <Button
                       className="btn btn-table basic-btn"
                       onClick={() => handleShow(appointment)}
@@ -165,16 +165,13 @@ const TableAppoinment = ({ appointments }) => {
                       <Modal.Body>
                         {selectedAppointment && (
                           <>
-                            <strong>Paciente:</strong>{" "}
-                            {selectedAppointment.name} <br />
+                            <strong>Paciente:</strong> {selectedAppointment.name} <br />
                             <strong>Día:</strong> {selectedAppointment.date}
                             <br />
                             <strong>Hora:</strong> {selectedAppointment.hour}
                             <br />
                             <br />
-                            <h5>
-                              ¿Estás seguro de que quieres eliminar este turno?
-                            </h5>
+                            <h5>¿Estás seguro de que quieres eliminar este turno?</h5>
                           </>
                         )}
                       </Modal.Body>
@@ -198,7 +195,6 @@ const TableAppoinment = ({ appointments }) => {
             </tbody>
           </Table>
         </div>
-        </>
       ) : (
         <h3 className="text-center">No hay turnos agendados</h3>
       )}
@@ -206,5 +202,4 @@ const TableAppoinment = ({ appointments }) => {
   );
 };
 
-export default TableAppoinment;
-
+export default TableAppointment;

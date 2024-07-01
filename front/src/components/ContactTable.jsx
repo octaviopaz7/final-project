@@ -1,16 +1,13 @@
 import { useState, useEffect } from "react";
-import "../assets/css/TableStyles.css";
 import axios from "axios";
-import { Table } from "react-bootstrap";
-
+import { Table, Form } from "react-bootstrap";
+import '../assets/css/TableStyles.css';
 const ContactTable = () => {
   const [contacts, setContacts] = useState([]);
 
   const fetchContacts = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/contact", {
-        credentials: "include",
-      });
+      const response = await axios.get("http://localhost:5000/api/contact");
       setContacts(response.data);
     } catch (error) {
       console.error("Error trayendo los mensajes de contacto", error);
@@ -32,44 +29,56 @@ const ContactTable = () => {
     return new Date(dateString).toLocaleDateString("es-ES", options);
   };
 
+  const handleCheckboxChange = async (contactId, isChecked) => {
+    try {
+      await axios.put(`http://localhost:5000/api/contact/${contactId}`, {
+        answered: isChecked,
+      });
+      fetchContacts(); 
+    } catch (error) {
+      console.error("Error al actualizar el estado de contestado", error);
+    }
+  };
+
   return (
-    <>
-      {contacts && contacts.length > 0 ? (
-        <>
-          <h2 className="contact-section-title">Contactos</h2>
+  <>
+      <h2 className="contact-section-title">Contactos</h2>
           <div>
             <Table className="table table-striped table-dark" responsive="md">
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Nombre</th>
-                  <th scope="col">Correo</th>
-                  <th scope="col">Servicio</th>
-                  <th scope="col">Mensaje</th>
-                  <th scope="col">Fecha</th>
-                </tr>
-              </thead>
-              <tbody>
-                {contacts.map((contact, index) => (
-                  <tr key={contact._id}>
-                    <th scope="row">{index + 1}</th>
-                    <td>{contact.name}</td>
-                    <td>{contact.email}</td>
-                    <td>{contact.service}</td>
-                    <td>{contact.message}</td>
-                    <td>{formatDate(contact.createdAt)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
-          </div>
-        </>
-      ) : (
-        <>
-          <h2 className="section-title">Contactos</h2>
-          <h3 className="text-center">No hay mensajes </h3>
-        </>
-      )}
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Nombre</th>
+            <th>Correo</th>
+            <th>Servicio</th>
+            <th>Mensaje</th>
+            <th>Fecha</th>
+            <th>Contestado</th>
+          </tr>
+        </thead>
+        <tbody>
+          {contacts.map((contact, index) => (
+            <tr key={contact._id}>
+              <td>{index + 1}</td>
+              <td>{contact.name}</td>
+              <td>{contact.email}</td>
+              <td>{contact.service}</td>
+              <td>{contact.message}</td>
+              <td>{formatDate(contact.createdAt)}</td>
+              <td>
+                <Form.Check
+                  type="checkbox"
+                  checked={contact.answered}
+                  onChange={(e) =>
+                    handleCheckboxChange(contact._id, e.target.checked)
+                  }
+                />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+    </div>
     </>
   );
 };
