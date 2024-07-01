@@ -10,7 +10,7 @@ body {
 
 
 .card-service-home {
-    height: 23rem;
+    min-height: 23rem;
     transition: 0.7s;
 }
 
@@ -101,4 +101,9 @@ body {
 }
 .text-abtus{
     font-weight: 500;
+}
+
+.btn-contact{
+    height: 2.5rem;
+    font-weight: 700;
 }

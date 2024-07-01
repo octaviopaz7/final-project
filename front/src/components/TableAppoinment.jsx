@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import { Button, Modal } from "react-bootstrap";
+import { Button, Modal, Table } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import UpdateModal from "./UpdateModal";
 
-const Table = ({ appointments }) => {
+const TableAppoinment = ({ appointments }) => {
   const [show, setShow] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
@@ -65,8 +65,34 @@ const Table = ({ appointments }) => {
   };
 
   const handleStatusChange = async (appointmentId, newStatus) => {
-    // Implementar la lógica para cambiar el estado de la cita
+    try {
+      const response = await axios.put(
+        `http://localhost:5000/api/appointments/${appointmentId}/status`,
+        { status: newStatus },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+
+      if (response.status === 200) {
+        setAppointmentsData((prevAppointments) =>
+          prevAppointments.map((appointment) =>
+            appointment._id === appointmentId
+              ? { ...appointment, status: newStatus }
+              : appointment
+          )
+        );
+      } else {
+        throw new Error("Error al actualizar el estado del turno");
+      }
+    } catch (error) {
+      console.error("Error al actualizar el estado del turno:", error);
+    }
   };
+
 
   useEffect(() => {
     fetchAppointments();
@@ -76,7 +102,8 @@ const Table = ({ appointments }) => {
     <>
       {appointmentsData && appointmentsData.length > 0 ? (
         <>
-          <table className="table table-striped table-dark caption-top">
+        <div>
+          <Table className="table table-striped table-dark caption-top" responsive="md">
             <thead>
               <tr>
                 <th scope="col">#</th>
@@ -169,7 +196,8 @@ const Table = ({ appointments }) => {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </Table>
+        </div>
         </>
       ) : (
         <h3 className="text-center">No hay turnos agendados</h3>
@@ -178,4 +206,5 @@ const Table = ({ appointments }) => {
   );
 };
 
-export default Table;
+export default TableAppoinment;
+

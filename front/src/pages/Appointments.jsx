@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Container, Row } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 import AddForm from "../components/AddForm";
 import Table from "../components/TableAppoinment";
 import axios from 'axios';
@@ -21,15 +21,19 @@ const Appointments = () => {
     }, []);
 
     return (
-        <Container>
+        <Container fluid="md">
             <section className="appointment-section d-flex flex-column align-items-center justify-content-center">
                 <Row className='w-100 py-5'>
                     <h2 className="text-center subtitle">Agregar Turno</h2>
                     <AddForm fetchAppointments={fetchAppointments} /> 
                 </Row>
-                <Row className='py-5'>
-                    <h2 className="text-center subtitle">Lista de turnos</h2>
+                <Row className='w-100 py-5'>
+                   <Col xs={12} md={12}>
+                   <h2 className="text-center subtitle">Lista de turnos</h2>
+                    
                     <Table appointments={appointments} /> 
+                   </Col>
+
                 </Row>
             </section>
         </Container>
@@ -37,3 +41,4 @@ const Appointments = () => {
 };
 
 export default Appointments;
+

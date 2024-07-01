@@ -1,4 +1,4 @@
-import { Container, Row, Col, Form, Button } from "react-bootstrap"
+import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPhone, faEnvelope } from '@fortawesome/free-solid-svg-icons';
@@ -17,12 +17,34 @@ const ContactSection = () => {
             ...prevState,
             [name]: value
         }));
+        console.log(formData)
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(formData);
+        
+        try {
+            const response = await fetch('http://localhost:5000/api/contact/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (response.ok) {
+                console.log('Formulario enviado con éxito');
+            } else {
+                console.error('Error al enviar el formulario');
+            }
+        } catch (error) {
+            console.error('Error en la solicitud:', error);
+        }
+
+        console.log(formData)
+
     };
+
     return (
         <section id="contact" className="contact-section d-flex align-items-center justify-content-center">
             <Container>
@@ -43,8 +65,8 @@ const ContactSection = () => {
                         </div>
                     </Col>
                     <Col lg={6} sm={12} md={6}>
-                        <Form onSubmit={handleSubmit} className="contact-form">
-                            <Form.Group controlId="formBasicName" className="mb-4">
+                        <Form onSubmit={handleSubmit} className="contact-form d-flex flex-column align-items-center justify-content-center w-100">
+                            <Form.Group controlId="formBasicName" className="mb-4 w-100">
                                 <Form.Label className="fw-medium fs-5">Nombre</Form.Label>
                                 <Form.Control
                                     type="text"
@@ -52,12 +74,12 @@ const ContactSection = () => {
                                     value={formData.name}
                                     onChange={handleChange}
                                     placeholder="Ingrese su nombre"
-                                    className="w-75"
+                                    className="w-100"
                                     required
                                 />
                             </Form.Group>
 
-                            <Form.Group controlId="formBasicEmail" className="mb-4">
+                            <Form.Group controlId="formBasicEmail" className="mb-4 w-100">
                                 <Form.Label className="fw-medium fs-5">Correo Electrónico</Form.Label>
                                 <Form.Control
                                     type="email"
@@ -65,12 +87,12 @@ const ContactSection = () => {
                                     value={formData.email}
                                     onChange={handleChange}
                                     placeholder="Ingrese su correo electrónico"
-                                    className="w-75"
+                                    className="w-100"
                                     required
                                 />
                             </Form.Group>
 
-                            <Form.Group controlId="formBasicService" className="mb-4">
+                            <Form.Group controlId="formBasicService" className="mb-4 w-100">
                                 <Form.Label className="fw-medium fs-5">Servicio Requerido</Form.Label>
                                 <Form.Control
                                     type="text"
@@ -78,11 +100,11 @@ const ContactSection = () => {
                                     value={formData.service}
                                     onChange={handleChange}
                                     placeholder="Especifique el servicio deseado"
-                                    className="w-75"
+                                    className="w-100"
                                 />
                             </Form.Group>
 
-                            <Form.Group controlId="formBasicMessage" className="mb-4">
+                            <Form.Group controlId="formBasicMessage" className="mb-4 w-100">
                                 <Form.Label className="fw-medium fs-5">Mensaje</Form.Label>
                                 <Form.Control
                                     as="textarea"
@@ -91,11 +113,11 @@ const ContactSection = () => {
                                     value={formData.message}
                                     onChange={handleChange}
                                     placeholder="Escriba su mensaje aquí"
-                                    className="w-75"
+                                    className="w-100"
                                 />
                             </Form.Group>
 
-                            <Button type="submit" className="btn btn-color w-75">
+                            <Button type="submit" className="btn btn-color btn-contact w-75">
                                 Enviar
                             </Button>
                         </Form>
@@ -105,4 +127,6 @@ const ContactSection = () => {
         </section>
     );
 };
+
 export default ContactSection;
+

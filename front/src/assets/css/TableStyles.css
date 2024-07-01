@@ -46,3 +46,10 @@
 .modal-header .btn-close{
   background-color: #d7f39e !important;
 }
+
+.contact-section-title{
+  color: #3d367a;
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+}

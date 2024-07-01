@@ -66,7 +66,7 @@ const flowCancelarTurno = addKeyword("###CANCELAR_TURNO###")
     async (ctx, { flowDynamic, endFlow, globalState }) => {
       const turno = await verificarTurno(ctx.from);
       if (turno === null) {
-        return endFlow("No tenes turno capo");
+        return endFlow("No se encontró ningun pendiente a tu nombre");
       }
       if (turno != null && turno.status === "Pendiente") {
         globalState.update({
@@ -81,7 +81,7 @@ const flowCancelarTurno = addKeyword("###CANCELAR_TURNO###")
           },
         ]);
       } else {
-        return endFlow("No tenes turno capo");
+        return endFlow("No se encontró ningun pendiente a tu nombre");
       }
     }
   )

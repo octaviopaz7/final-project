@@ -1,9 +1,8 @@
-
 import Contact from '../models/contact.model.js';
 
-const submitContactForm = async (req, res) => {
+export const submitContactForm = async (req, res) => {
     const { name, email, service, message } = req.body;
-    
+
     try {
         const newContact = new Contact({
             name,
@@ -19,9 +18,9 @@ const submitContactForm = async (req, res) => {
     }
 };
 
-const getAllContactForms = async (req, res) => {
+export const getAllContactForms = async (req, res) => {
     try {
-        const contacts = await Contact.find(); 
+        const contacts = await Contact.find();
         res.status(200).json(contacts);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -29,4 +28,4 @@ const getAllContactForms = async (req, res) => {
 };
 
 
-export { getAllContactForms, submitContactForm };
+
