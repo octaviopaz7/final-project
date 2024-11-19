@@ -10,6 +10,7 @@ export const createAppointment = async (appointmentData) => {
       hour: appointmentData.hour,
       reminderSent: appointmentData.reminderSent || false,
       status: appointmentData.status || "Pendiente",
+      serviceType: appointmentData.serviceType
     });
 
     await newAppointment.validate();
@@ -20,6 +21,8 @@ export const createAppointment = async (appointmentData) => {
     throw new Error(error.message);
   }
 };
+
+
 
 export const getAppointments = async () => {
   return await Appointment.find();

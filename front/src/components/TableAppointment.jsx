@@ -138,7 +138,7 @@ const TableAppointment = ({ appointments }) => {
                       <option value="Cancelado">Cancelado</option>
                     </select>
                   </td>
-                  <td>{appointment.appointmentType}</td>
+                  <td>{appointment.serviceType}</td>
                   <td className="table-actions">
                     <Button
                       className="btn btn-table"

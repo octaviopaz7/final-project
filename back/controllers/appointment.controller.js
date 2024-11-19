@@ -87,3 +87,27 @@ export const deleteAppointment = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+export const getAppointmentsByDate = async (req, res) => {
+    try {
+      const { startDate, endDate } = req.query;
+  
+      // Validar que ambas fechas hayan sido proporcionadas
+      if (!startDate || !endDate) {
+        return res.status(400).json({ message: 'Debe proporcionar un rango de fechas válido (startDate y endDate).' });
+      }
+  
+      // Obtener citas por fecha usando el servicio
+      const appointments = await appointmentsService.getAppointmentsByDate(startDate, endDate);
+  
+      // Si no se encuentran citas, devolver un mensaje adecuado
+      if (appointments.length === 0) {
+        return res.status(404).json({ message: 'No se encontraron citas en ese rango de fechas.' });
+      }
+  
+      // Responder con las citas encontradas
+      res.status(200).json(appointments);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  };

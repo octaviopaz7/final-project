@@ -31,6 +31,9 @@ const appointmentSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  serviceType : {
+    type: String
+  }
 });
 
 export default mongoose.model("Appointment", appointmentSchema);
