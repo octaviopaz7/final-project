@@ -1,0 +1,5 @@
+ 
+#GET http://localhost:5000/api/appointments/phone/5493813846942
+#GET http://localhost:5000/api/appointments/phone/5493816524146
+
+ GET http://localhost:5000/api/appointments/phone/5493813846942

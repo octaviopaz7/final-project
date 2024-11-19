@@ -1,0 +1,82 @@
+.footer {
+    padding: 0;
+    margin: 0;
+    color: rgb(153, 153, 153);
+  }
+  
+  .footer-cont {
+    background-color: #3d367a;
+    width: 100%;
+    padding: 3% 0; /* Ajuste de padding top y bottom */
+    margin: 0;
+  }
+  
+  .footer-nav {
+    list-style: none;
+    font-weight: 400;
+    width: 100%;
+  }
+  
+  .footer-item {
+    font-size: 1.7rem;
+    color: white;
+    margin-bottom: 10px; /* Espacio entre elementos de la lista */
+  }
+  
+  .footer-item a {
+    text-decoration: none;
+    color: #f7f7f7; /* Color de los enlaces */
+    transition: 0.5s;
+  }
+  
+  .footer-item a:hover {
+    color: #cbc9c9;
+  }
+  
+  .text-muted {
+    color: #f7f7f7;
+  }
+  
+  .tooth-logo {
+    width: 70px; /* Tamaño del logo */
+    height: auto;
+    margin-top: 10px; /* Espacio superior del logo */
+    display: block;
+    background-image: url("../assets/img/LogoDiente.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+  
+  .footer-icons {
+    position: absolute;
+    right: 0; /* Ajuste del posicionamiento */
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; /* Alineación de los íconos a la derecha */
+    color: white;
+  }
+  
+  .iconos a {
+    margin: 10px 0; /* Espaciado entre íconos */
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    color: white;
+    font-size: 1.2rem;
+
+  }
+ 
+  .iconos .icon {
+    margin-right: 8px;
+    font-size: 24px;
+  }
+  
+  @media (min-width: 768px) {
+    .footer-col.md-align-start {
+      align-items: flex-start; /* Alinear a la izquierda en dispositivos medianos y superiores */
+    }
+  }
+  
