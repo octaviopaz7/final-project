@@ -238,8 +238,14 @@ const flowVerificarTurno = addKeyword("###VERIFICAR_TURNO###").addAnswer(
   .addAnswer("Ingresa el horario seleccionado HH:MM", { capture: true }, async (ctx, { globalState, flowDynamic, fallBack }) => {
     const horarioSeleccionado = ctx.body.trim();
     const partesHorario = horarioSeleccionado.split(":");
+    const formatoHorario = "HH:mm";
+    const horarioMoment = moment(horarioSeleccionado,formatoHorario, true)
     if (partesHorario.length !== 2) {
       return fallBack("❌ El formato del horario ingresado no es válido. Debe ser HH:MM.");
+    }
+
+    if (!horarioMoment.isValid()) {
+      return fallBack("❌ El horario ingresado no es válido. Debe tener el formato HH:MM.");
     }
     const horas = parseInt(partesHorario[0], 10);
     const minutos = parseInt(partesHorario[1], 10);
