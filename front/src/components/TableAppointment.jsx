@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button, Modal, Table, Form } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenToSquare, faTrash, faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
+import { faPenToSquare, faTrash, faArrowDown, faArrowUp, faMinus } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import UpdateModal from "./UpdateModal";
 
@@ -11,7 +11,7 @@ const TableAppointment = ({ appointments }) => {
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [appointmentsData, setAppointmentsData] = useState(appointments);
   const [searchTerm, setSearchTerm] = useState(""); // Estado para la búsqueda
-  const [sortOrder, setSortOrder] = useState("asc"); // Estado para el orden (ascendente o descendente)
+  const [sortOrder, setSortOrder] = useState("none"); // Estado para el orden (ascendente o descendente)
 
   const handleClose = () => setShow(false);
   const handleShow = (appointment) => {
@@ -98,7 +98,11 @@ const TableAppointment = ({ appointments }) => {
 
   useEffect(() => {
     fetchAppointments();
-  }, []);
+  }, []); // Al cargar el componente, se obtiene la lista de citas
+
+  useEffect(() => {
+    setAppointmentsData(appointments); // Cuando cambian las props, actualiza el estado
+  }, [appointments]);
 
   // Filtrar citas según el término de búsqueda
   const filteredAppointments = appointmentsData.filter(
@@ -107,18 +111,23 @@ const TableAppointment = ({ appointments }) => {
       appointment.date.includes(searchTerm)
   );
 
-  // Ordenar citas por horario
-  const sortedAppointments = [...filteredAppointments].sort((a, b) => {
+   // Ordenar citas por horario
+   const sortedAppointments = [...filteredAppointments].sort((a, b) => {
     if (sortOrder === "asc") {
       return a.hour.localeCompare(b.hour);
-    } else {
+    } else if (sortOrder === "desc") {
       return b.hour.localeCompare(a.hour);
     }
+    return 0; // Si el estado es "none", no ordenar
   });
 
   // Alternar el orden
   const toggleSortOrder = () => {
-    setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
+    setSortOrder((prevOrder) => {
+      if (prevOrder === "none") return "asc";
+      if (prevOrder === "asc") return "desc";
+      return "none";
+    });
   };
 
   return (
@@ -146,7 +155,7 @@ const TableAppointment = ({ appointments }) => {
                     variant="link"
                     className="text-light ms-1 p-0 border-0 shadow-none"
                     onClick={toggleSortOrder} >
-                  <FontAwesomeIcon icon={sortOrder === "asc" ? faArrowUp : faArrowDown} />
+                    <FontAwesomeIcon icon={sortOrder === "none" ? faMinus : sortOrder === "asc" ? faArrowUp : faArrowDown} />
                   </Button>
                 </th>
                 <th scope="col">Estado</th>
