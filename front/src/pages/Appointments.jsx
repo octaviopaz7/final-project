@@ -37,7 +37,7 @@ const Appointments = () => {
       </section>
 
       {/* Modal para agregar turno */}
-      <Modal show={showModal} onHide={handleCloseModal}>
+      <Modal show={showModal} onHide={handleCloseModal} centered>
         <Modal.Header closeButton>
           <Modal.Title>Agregar Nuevo Turno</Modal.Title>
         </Modal.Header>
