@@ -264,14 +264,13 @@ const flowSolicitarTurno = addKeyword("###SOLICITAR_TURNO###")
   .addAnswer(
     "Por favor, ingresa la fecha seleccionada (formato: DD/MM/YYYY).",
     { capture: true },
-    async (ctx, { globalState, flowDynamic, fallBack }) => {
+    async (ctx, { globalState, flowDynamic, fallBack, endFlow }) => {
       const fechaSeleccionada = ctx.body.trim();
       const fechaValida = moment(
         fechaSeleccionada,
         "DD/MM/YYYY",
         true
       ).isValid();
-
       const fechaSeleccionadaMoment = moment(fechaSeleccionada, "DD/MM/YYYY");
       const fechaActual = moment();
 
@@ -286,6 +285,7 @@ const flowSolicitarTurno = addKeyword("###SOLICITAR_TURNO###")
           "❌ La fecha ingresada no puede ser anterior a la fecha actual. Por favor ingresa una fecha futura."
         );
       }
+
       const turnosConfirmadosFecha = await verificarTurnos(fechaSeleccionada);
       const horariosDisponiblesDefault = [
         "09:00",
@@ -304,29 +304,47 @@ const flowSolicitarTurno = addKeyword("###SOLICITAR_TURNO###")
         "17:00",
         "17:30",
       ];
+
       await globalState.update({ fecha: fechaSeleccionada });
-      if (turnosConfirmadosFecha == undefined) {
-        console.log(
-          "No hay turnos 'Confirmados' ese día los horarios disponibles son",
-          horariosDisponiblesDefault
+
+      let horariosFiltrados = horariosDisponiblesDefault;
+
+      if (fechaSeleccionadaMoment.isSame(fechaActual, "day")) {
+        const horaActual = fechaActual.format("HH:mm");
+        horariosFiltrados = horariosDisponiblesDefault.filter(
+          (horario) => horario > horaActual
         );
-        return await flowDynamic(
-          `Los turnos disponibles para la fecha *${fechaSeleccionada}* son:\n` +
-            horariosDisponiblesDefault
-              .map((horario) => `➡ - ${horario}.`)
-              .join("\n")
-        );
+      }
+
+      if (!turnosConfirmadosFecha || turnosConfirmadosFecha.length === 0) {
+        if (horariosFiltrados.length === 0) {
+          return await flowDynamic(
+            `❌ No hay turnos disponibles para la fecha *${fechaSeleccionada}*...`
+          );
+        } else {
+          return await flowDynamic(
+            `Los turnos disponibles para la fecha *${fechaSeleccionada}* son:\n` +
+              horariosFiltrados.map((horario) => `➡ - ${horario}.`).join("\n")
+          );
+        }
       } else {
         const turnosConfirmadosHora = turnosConfirmadosFecha.map(
           (turno) => turno.hour
         );
-        const horariosDisponibles = horariosDisponiblesDefault.filter(
+        const horariosDisponibles = horariosFiltrados.filter(
           (horario) => !turnosConfirmadosHora.includes(horario)
         );
-        return await flowDynamic(
-          `Los turnos disponibles para la fecha *${fechaSeleccionada}* son:\n` +
-            horariosDisponibles.map((horario) => `➡ - ${horario}.`).join("\n")
-        );
+
+        if (horariosDisponibles.length === 0) {
+          return fallBack(
+            `❌ No hay turnos disponibles para la fecha *${fechaSeleccionada}*, ingresa una nueva fecha.`
+          );
+        } else {
+          return await flowDynamic(
+            `Los turnos disponibles para la fecha *${fechaSeleccionada}* son:\n` +
+              horariosDisponibles.map((horario) => `➡ - ${horario}.`).join("\n")
+          );
+        }
       }
     }
   )
