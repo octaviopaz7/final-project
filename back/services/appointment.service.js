@@ -33,6 +33,24 @@ export const getAppointmentByPhone = async (phone) => {
   return await Appointment.findOne({ phone: phone, status: "Pendiente" });
 };
 
+export const getAppointmentsByDate = async (date) => {
+  try {
+    // Valida que la fecha esté en formato DD/MM/AAAA
+    const dateRegex = /^\d{2}\/\d{2}\/\d{4}$/;
+    if (!dateRegex.test(date)) {
+      throw new Error(
+        "El formato de la fecha es inválido. Debe ser DD/MM/AAAA."
+      );
+    }
+
+    // Realiza la consulta con el formato adecuado
+    return await Appointment.find({ date: date, status: "Confirmado" });
+  } catch (error) {
+    console.error("Error al buscar citas por fecha:", error);
+    throw new Error(error.message);
+  }
+};
+
 export const updateStatusAppointment = async (id, newStatus) => {
   try {
     const appointment = await Appointment.findByIdAndUpdate(
@@ -66,5 +84,3 @@ export const updateAppointment = async (id, appointmentData) => {
     throw new Error(error.message);
   }
 };
-
-

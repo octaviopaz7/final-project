@@ -184,6 +184,27 @@ const verificarTurno = async (numeroCelular) => {
   }
 };
 
+//Función para obtener turnos de un día en especifico.
+const verificarTurnos = async (fecha) => {
+  const fechaCodificada = encodeURIComponent(fecha);
+  try {
+    const respuesta = await axios.get(
+      `http://localhost:5000/api/appointments/check-date/${fechaCodificada}`
+    );
+    if (respuesta.status === 200) {
+      if (Array.isArray(respuesta.data)) {
+        return respuesta.data;
+      } else {
+        return [respuesta.data];
+      }
+    } else {
+      return [];
+    }
+  } catch (error) {
+    console.error("Error al verificar turno con fecha;", error);
+  }
+};
+
 const flowVerificarTurno = addKeyword("###VERIFICAR_TURNO###").addAnswer(
   "Verificando si posees un turno...",
   { delay: 3000 },
@@ -212,7 +233,7 @@ const flowSolicitarTurno = addKeyword("###SOLICITAR_TURNO###")
   .addAnswer(
     "👤 *Ingresa tu nombre y apellido:*",
     { capture: true },
-    async (ctx, { flowDynamic, globalState }) => {
+    async (ctx, { globalState }) => {
       await globalState.update({ nombre: ctx.body });
     }
   )
@@ -265,26 +286,52 @@ const flowSolicitarTurno = addKeyword("###SOLICITAR_TURNO###")
           "❌ La fecha ingresada no puede ser anterior a la fecha actual. Por favor ingresa una fecha futura."
         );
       }
-
-      const turnosExistentes = await verificarTurno(ctx.from);
-
-      const turnosEnFecha = turnosExistentes.filter((turno) => {
-        const turnoFecha = moment(turno.date, "DD/MM/YYYY");
-        return turnoFecha.isSame(fechaSeleccionadaMoment, "day");
-      });
-
-      if (turnosEnFecha.length > 0) {
-        return fallBack(
-          `❌ Ya tienes un turno programado para el día ${fechaSeleccionada}.`
+      const turnosConfirmadosFecha = await verificarTurnos(fechaSeleccionada);
+      const horariosDisponiblesDefault = [
+        "09:00",
+        "09:30",
+        "10:00",
+        "10:30",
+        "11:00",
+        "11:30",
+        "12:00",
+        "14:00",
+        "14:30",
+        "15:00",
+        "15:30",
+        "16:00",
+        "16:30",
+        "17:00",
+        "17:30",
+      ];
+      await globalState.update({ fecha: fechaSeleccionada });
+      if (turnosConfirmadosFecha == undefined) {
+        console.log(
+          "No hay turnos 'Confirmados' ese día los horarios disponibles son",
+          horariosDisponiblesDefault
+        );
+        return await flowDynamic(
+          `Los turnos disponibles para la fecha *${fechaSeleccionada}* son:\n` +
+            horariosDisponiblesDefault
+              .map((horario) => `➡ - ${horario}.`)
+              .join("\n")
+        );
+      } else {
+        const turnosConfirmadosHora = turnosConfirmadosFecha.map(
+          (turno) => turno.hour
+        );
+        const horariosDisponibles = horariosDisponiblesDefault.filter(
+          (horario) => !turnosConfirmadosHora.includes(horario)
+        );
+        return await flowDynamic(
+          `Los turnos disponibles para la fecha *${fechaSeleccionada}* son:\n` +
+            horariosDisponibles.map((horario) => `➡ - ${horario}.`).join("\n")
         );
       }
-
-      await globalState.update({ fecha: fechaSeleccionada });
-      await mostrarHorariosDisponibles(ctx, globalState, flowDynamic);
     }
   )
   .addAnswer(
-    "Ingresa el horario seleccionado HH:MM",
+    "Ingresa el horario seleccionado de la lista anterior respetando el siguiente formato HH:MM, por ejemplo '*11:00*'.",
     { capture: true },
     async (ctx, { globalState, flowDynamic, fallBack }) => {
       const horarioSeleccionado = ctx.body.trim();
