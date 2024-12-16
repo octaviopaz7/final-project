@@ -111,14 +111,12 @@ const flowCancelarTurno = addKeyword("###CANCELAR_TURNO###").addAction(
         "Saliendo a menú principal..."
       );
     } else {
-      console.log(respuesta.map((turno) => turno.status));
       const idTurnos = respuesta
         .filter(
           (turno) =>
             turno.status === "Pendiente" || turno.status === "Confirmado"
         )
         .map((turno) => turno._id);
-      console.log(idTurnos);
       await state.update({ turnos: idTurnos });
       if (idTurnos.length === 0) {
         return await flowDynamic(
@@ -151,9 +149,7 @@ const usuarioConTurnosCancelables = addKeyword("###TEST####").addAnswer(
   { capture: true },
   async (ctx, { flowDynamic, state, fallBack }) => {
     const idTurnos = state.get("turnos");
-    console.log(idTurnos.length);
     const turnoElegido = ctx.body.trim();
-    console.log(turnoElegido);
     if (!/^\d+$/.test(turnoElegido)) {
       // Verifica si no es un número entero positivo
       return fallBack(
@@ -171,9 +167,11 @@ const usuarioConTurnosCancelables = addKeyword("###TEST####").addAnswer(
         idTurnos[turnoElegido - 1]
       );
       if (respuesta.length == 0) {
-        return await flowDynamic("No se pudo Cancelar tu Turno, intente nuevamente a la brevedad...")
+        return await flowDynamic(
+          "No se pudo Cancelar tu Turno, intente nuevamente a la brevedad..."
+        );
       } else {
-        return await flowDynamic(`¡Tu turno fué cancelado exitosamente!.`)
+        return await flowDynamic(`¡Tu turno fué cancelado exitosamente!.`);
       }
     }
   }
