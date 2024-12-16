@@ -30,7 +30,7 @@ export const getAppointmentById = async (id) => {
 };
 
 export const getAppointmentByPhone = async (phone) => {
-  return await Appointment.findOne({ phone: phone, status: "Pendiente" });
+  return await Appointment.findOne({ phone: phone, status: { $in: ["Pendiente", "Confirmado"] } });
 };
 
 export const getAppointmentsByDate = async (date) => {
