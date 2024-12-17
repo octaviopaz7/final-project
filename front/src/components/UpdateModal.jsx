@@ -9,7 +9,7 @@ import { useAppointments } from "../context/AppointmentsContext";
 import Swal from "sweetalert2";
 import * as yup from "yup";
 
-const UpdateModal = ({ show, handleClose, appointmentId, handleAddAppointment }) => {
+const UpdateModal = ({ show, handleClose, appointmentId, handleAddAppointment,updateAppointments }) => {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [appointmentType, setAppointmentType] = useState("");
@@ -113,6 +113,7 @@ const UpdateModal = ({ show, handleClose, appointmentId, handleAddAppointment })
       );
       
       await handleAddAppointment();
+      updateAppointments(); // Llama la función para ordenar y actualizar las citas
 
       Swal.fire({
         icon: "success",
