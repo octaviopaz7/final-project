@@ -38,6 +38,7 @@ const TableAppointment = ({ appointments }) => {
     }
   };
 
+  //funcion para que se ordenen las citas automaticamente por fechas luego de actualizar
   const updateAppointments = async () => {
     try {
         const response = await axios.get("http://localhost:5000/api/appointments", { withCredentials: true });

@@ -15,6 +15,7 @@ const UpdateModal = ({ show, handleClose, appointmentId, handleAddAppointment,up
   const [appointmentType, setAppointmentType] = useState("");
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState(null);
+  const [occupiedTimes, setOccupiedTimes] = useState([]);
 
   const { token } = useAuth();
   const { fetchAppointments } = useAppointments();
@@ -36,7 +37,7 @@ const UpdateModal = ({ show, handleClose, appointmentId, handleAddAppointment,up
       .required("Teléfono es requerido"),
     date: yup
       .date()
-      .min(now, "No puedes seleccionar una fecha que ya haya pasado ni el día de hoy")
+      .min(new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1), "No puedes seleccionar el día actual ni fechas pasadas")
       .required("Fecha de cita es requerida"),
   });
 
@@ -59,6 +60,22 @@ const UpdateModal = ({ show, handleClose, appointmentId, handleAddAppointment,up
           setPhone(phone);
           setAppointmentType(appointmentType);
           setSelectedTime(hour);
+
+          // Obtener citas del mismo día y extraer horarios ocupados
+          const allAppointmentsResponse = await axios.get("http://localhost:5000/api/appointments", {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          const allAppointments = allAppointmentsResponse.data;
+
+          const occupiedTimes = allAppointments
+            .filter(
+              (appointment) =>
+                appointment.date === date && appointment._id !== appointmentId // Excluir la cita actual
+            )
+            .map((appointment) => appointment.hour);
+
+          setOccupiedTimes(occupiedTimes); // Guardar horarios ocupados     
+          
         } catch (error) {
           console.error("Error fetching appointment details:", error);
           Swal.fire({
@@ -87,6 +104,7 @@ const UpdateModal = ({ show, handleClose, appointmentId, handleAddAppointment,up
   const handleCloseAndReset = () => {
     handleClose();
     resetFields();
+    updateAppointments(); // Llama la función para ordenar y actualizar las citas
   };
 
   const handleUpdate = async (event) => {
@@ -140,9 +158,27 @@ const UpdateModal = ({ show, handleClose, appointmentId, handleAddAppointment,up
     }
   };
 
-  const handleDateChange = (date) => {
+  const handleDateChange = async (date) => {
     setSelectedDate(date);
+  
+    // Obtener horarios ocupados para la nueva fecha seleccionada
+    try {
+      const response = await axios.get("http://localhost:5000/api/appointments", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const allAppointments = response.data;
+  
+      const formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+      const occupiedTimes = allAppointments
+        .filter((appointment) => appointment.date === formattedDate && appointment._id !== appointmentId)
+        .map((appointment) => appointment.hour);
+  
+      setOccupiedTimes(occupiedTimes);
+    } catch (error) {
+      console.error("Error fetching occupied times:", error);
+    }
   };
+  
 
   const handleTimeChange = (event) => {
     const time = event.target.value;
@@ -157,32 +193,24 @@ const UpdateModal = ({ show, handleClose, appointmentId, handleAddAppointment,up
     ];
     const intervalMinutes = 30;
   
-    const now = new Date();
-  
     intervals.forEach(({ start, end }) => {
       for (let hour = start; hour < end; hour++) {
         for (let minute = 0; minute < 60; minute += intervalMinutes) {
-          const time = new Date();
-          time.setHours(hour, minute, 0, 0); // Configurar hora específica
-          
-          // Filtrar si la fecha seleccionada es hoy y la hora ya pasó
-          if (
-            selectedDate.toDateString() === now.toDateString() &&
-            time < now
-          ) {
-            continue; // Omitir horas pasadas del día actual
-          }
-  
           const hourFormatted = hour.toString().padStart(2, "0");
           const minuteFormatted = minute.toString().padStart(2, "0");
           const timeString = `${hourFormatted}:${minuteFormatted}`;
-          times.push(timeString);
+  
+          // Excluir horarios ocupados
+          if (!occupiedTimes.includes(timeString)) {
+            times.push(timeString);
+          }
         }
       }
     });
   
     return times;
   };
+  
 
   return (
     <Modal show={show} onHide={handleCloseAndReset}>
@@ -238,7 +266,7 @@ const UpdateModal = ({ show, handleClose, appointmentId, handleAddAppointment,up
                   dateFormat="dd/MM/yyyy"
                   locale={es}
                   className="form-control"
-                  minDate={now}
+                  minDate={new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1)} // Permite solo a partir de mañana
                 />
               </Form.Group>
             </Col>
