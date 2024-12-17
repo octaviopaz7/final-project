@@ -184,7 +184,7 @@ const TableAppointment = ({ appointments }) => {
                     variant="link"
                     className="text-light ms-1 p-0 border-0 shadow-none"
                     onClick={toggleSortOrder} >
-                    <FontAwesomeIcon icon={sortOrder === "none" ? faMinus : sortOrder === "asc" ? faArrowUp : faArrowDown} />
+                    <FontAwesomeIcon icon={sortOrder === "none" ? faMinus : sortOrder === "asc" ?  faArrowDown : faArrowUp} />
                   </Button>
                 </th>
                 <th scope="col">Estado</th>

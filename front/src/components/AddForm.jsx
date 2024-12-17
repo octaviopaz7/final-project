@@ -15,15 +15,19 @@ const AddForm = ({ fetchAppointments, handleCloseModal }) => {
   const schema = yup.object().shape({
     name: yup
     .string()
-    .matches(/^[a-zA-Z\s]+$/, "El nombre solo puede contener letras")
+    .matches(/^[a-zA-ZáéíóúÁÉÍÓÚ\s]+$/, "El nombre solo puede contener letras")
     .required("Nombre es requerido"),
     phone: yup
     .string()
-    .matches(/^[3][0-9]{9}$/, "El teléfono debe tener el formato 3814231548 (sin 0 y sin 15)")
+    .matches(
+      /^\d{2,3}9\d{2,4}\d{6,8}$/,
+      "Formato correcto: código país + 9 + código área + número (sin 0 ni 15). Ejemplo: 5493814752316"
+    )
     .required("Teléfono es requerido"),
     appointmentType: yup.string().required("Tipo de consulta es requerido"),
     date: yup.date().required("Fecha de cita es requerida"),
   });
+
 
   // Obtener la fecha y hora actual
   const now = new Date();
