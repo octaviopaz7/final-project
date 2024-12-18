@@ -7,16 +7,39 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useAuth } from "../context/AuthContext";
 import { useAppointments } from "../context/AppointmentsContext";
 import Swal from "sweetalert2";
+import * as yup from "yup";
 
-const UpdateModal = ({ show, handleClose, appointmentId, handleAddAppointment }) => {
+const UpdateModal = ({ show, handleClose, appointmentId, handleAddAppointment,updateAppointments }) => {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [appointmentType, setAppointmentType] = useState("");
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState(null);
+  const [occupiedTimes, setOccupiedTimes] = useState([]);
 
   const { token } = useAuth();
   const { fetchAppointments } = useAppointments();
+
+  const now = new Date();
+
+  // Esquema de validación
+  const schema = yup.object().shape({
+    name: yup
+      .string()
+      .matches(/^[a-zA-ZáéíóúÁÉÍÓÚ\s]+$/, "El nombre solo puede contener letras")
+      .required("Nombre es requerido"),
+    phone: yup
+      .string()
+      .matches(
+        /^\d{2,3}9\d{2,4}\d{6,8}$/,
+        "Formato correcto: código país + 9 + código área + número (sin 0 ni 15). Ejemplo: 5493814752316"
+      )
+      .required("Teléfono es requerido"),
+    date: yup
+      .date()
+      .min(new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1), "No puedes seleccionar el día actual ni fechas pasadas")
+      .required("Fecha de cita es requerida"),
+  });
 
   useEffect(() => {
     const fetchAppointmentDetails = async () => {
@@ -30,13 +53,29 @@ const UpdateModal = ({ show, handleClose, appointmentId, handleAddAppointment })
           );
           const { name, phone, appointmentType, date, hour } = response.data;
           const dbDate = date;
-          const [day, month, year] = dbDate.split("/");
-          const dateObject = new Date(`${year}-${month}-${day}`);
+          const [day, month, year] = dbDate.split("/"); // dd/MM/yyyy
+          const dateObject = new Date(`${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}T00:00:00`);
           setSelectedDate(dateObject);
           setName(name);
           setPhone(phone);
           setAppointmentType(appointmentType);
           setSelectedTime(hour);
+
+          // Obtener citas del mismo día y extraer horarios ocupados
+          const allAppointmentsResponse = await axios.get("http://localhost:5000/api/appointments", {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          const allAppointments = allAppointmentsResponse.data;
+
+          const occupiedTimes = allAppointments
+            .filter(
+              (appointment) =>
+                appointment.date === date && appointment._id !== appointmentId // Excluir la cita actual
+            )
+            .map((appointment) => appointment.hour);
+
+          setOccupiedTimes(occupiedTimes); // Guardar horarios ocupados     
+          
         } catch (error) {
           console.error("Error fetching appointment details:", error);
           Swal.fire({
@@ -53,9 +92,28 @@ const UpdateModal = ({ show, handleClose, appointmentId, handleAddAppointment })
     }
   }, [appointmentId, token, show]);
 
+
+  const resetFields = () => {
+    setName("");
+    setPhone("");
+    setAppointmentType("");
+    setSelectedDate(new Date());
+    setSelectedTime(null);
+  };
+
+  const handleCloseAndReset = () => {
+    handleClose();
+    resetFields();
+    updateAppointments(); // Llama la función para ordenar y actualizar las citas
+  };
+
   const handleUpdate = async (event) => {
     event.preventDefault();
+    
     try {
+      const values = { name, phone, date: selectedDate };
+      await schema.validate(values, { abortEarly: false });
+
       const updatedAppointment = {
         name,
         phone,
@@ -73,6 +131,7 @@ const UpdateModal = ({ show, handleClose, appointmentId, handleAddAppointment })
       );
       
       await handleAddAppointment();
+      updateAppointments(); // Llama la función para ordenar y actualizar las citas
 
       Swal.fire({
         icon: "success",
@@ -80,20 +139,46 @@ const UpdateModal = ({ show, handleClose, appointmentId, handleAddAppointment })
         text: "El turno se modificó correctamente.",
       });
 
-      await handleClose();
+      await handleCloseAndReset();
     } catch (error) {
-      console.error("Error updating appointment:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Error al actualizar",
-        text: "No se pudo modificar el turno. Por favor, inténtalo de nuevo.",
-      });
+      if (error.name === "ValidationError") {
+        Swal.fire({
+          icon: "error",
+          title: "Error de validación",
+          text: error.errors.join(", "),
+        });
+      } else {
+        console.error("Error updating appointment:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Error al actualizar",
+          text: "No se pudo modificar el turno. Por favor, inténtalo de nuevo.",
+        });
+      }
     }
   };
 
-  const handleDateChange = (date) => {
+  const handleDateChange = async (date) => {
     setSelectedDate(date);
+  
+    // Obtener horarios ocupados para la nueva fecha seleccionada
+    try {
+      const response = await axios.get("http://localhost:5000/api/appointments", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const allAppointments = response.data;
+  
+      const formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+      const occupiedTimes = allAppointments
+        .filter((appointment) => appointment.date === formattedDate && appointment._id !== appointmentId)
+        .map((appointment) => appointment.hour);
+  
+      setOccupiedTimes(occupiedTimes);
+    } catch (error) {
+      console.error("Error fetching occupied times:", error);
+    }
   };
+  
 
   const handleTimeChange = (event) => {
     const time = event.target.value;
@@ -107,23 +192,28 @@ const UpdateModal = ({ show, handleClose, appointmentId, handleAddAppointment })
       { start: 16, end: 19 },
     ];
     const intervalMinutes = 30;
-
+  
     intervals.forEach(({ start, end }) => {
       for (let hour = start; hour < end; hour++) {
         for (let minute = 0; minute < 60; minute += intervalMinutes) {
           const hourFormatted = hour.toString().padStart(2, "0");
           const minuteFormatted = minute.toString().padStart(2, "0");
           const timeString = `${hourFormatted}:${minuteFormatted}`;
-          times.push(timeString);
+  
+          // Excluir horarios ocupados
+          if (!occupiedTimes.includes(timeString)) {
+            times.push(timeString);
+          }
         }
       }
     });
-
+  
     return times;
   };
+  
 
   return (
-    <Modal show={show} onHide={handleClose}>
+    <Modal show={show} onHide={handleCloseAndReset}>
       <Modal.Header closeButton>
         <Modal.Title>Modificar Turno</Modal.Title>
       </Modal.Header>
@@ -176,6 +266,7 @@ const UpdateModal = ({ show, handleClose, appointmentId, handleAddAppointment })
                   dateFormat="dd/MM/yyyy"
                   locale={es}
                   className="form-control"
+                  minDate={new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1)} // Permite solo a partir de mañana
                 />
               </Form.Group>
             </Col>
@@ -199,7 +290,7 @@ const UpdateModal = ({ show, handleClose, appointmentId, handleAddAppointment })
           </Row>
 
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
+            <Button variant="secondary" onClick={handleCloseAndReset}>
               Cerrar
             </Button>
             <Button className="basic-btn" type="submit">

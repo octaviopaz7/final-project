@@ -5,6 +5,7 @@ import { faPenToSquare, faTrash, faArrowDown, faArrowUp, faMinus } from "@fortaw
 import axios from "axios";
 import UpdateModal from "./UpdateModal";
 import Swal from "sweetalert2";
+import moment from "moment";
 
 const TableAppointment = ({ appointments }) => {
   const [show, setShow] = useState(false);
@@ -36,6 +37,22 @@ const TableAppointment = ({ appointments }) => {
       });
     }
   };
+
+  //funcion para que se ordenen las citas automaticamente por fechas luego de actualizar
+  const updateAppointments = async () => {
+    try {
+        const response = await axios.get("http://localhost:5000/api/appointments", { withCredentials: true });
+        const sortedAppointments = response.data.sort((a, b) => {
+            const dateA = moment(a.date, "DD-MM-YYYY");
+            const dateB = moment(b.date, "DD-MM-YYYY");
+            return dateA.isBefore(dateB) ? -1 : dateA.isAfter(dateB) ? 1 : 0;
+        });
+        setAppointmentsData(sortedAppointments);
+    } catch (error) {
+        console.error("Error actualizando citas:", error);
+    }
+};
+
 
   const handleShowUpdateModal = (appointmentId) => {
     setSelectedAppointment(appointmentId);
@@ -130,9 +147,19 @@ const TableAppointment = ({ appointments }) => {
   }, []); // Al cargar el componente, se obtiene la lista de citas
 
   useEffect(() => {
-    setAppointmentsData(appointments); // Cuando cambian las props, actualiza el estado
-  }, [appointments]);
-
+    // Ordenamos las citas por fecha completa de forma ascendente (año, mes, día)
+    const sortedAppointments = [...appointments].sort((a, b) => {
+      const dateA = moment(a.date, "DD-MM-YYYY"); 
+      const dateB = moment(b.date, "DD-MM-YYYY");
+  
+      // Orden ascendente: primero por año, luego por mes, luego por día
+      return dateA.isBefore(dateB) ? -1 : dateA.isAfter(dateB) ? 1 : 0;
+    });
+  
+    setAppointmentsData(sortedAppointments); // Actualizamos el estado con las citas ordenadas
+  }, [appointments]); // Este efecto se ejecuta cuando 'appointments' cambian
+  
+  
   // Filtrar citas según el término de búsqueda
   const filteredAppointments = appointmentsData.filter(
     (appointment) =>
@@ -184,7 +211,7 @@ const TableAppointment = ({ appointments }) => {
                     variant="link"
                     className="text-light ms-1 p-0 border-0 shadow-none"
                     onClick={toggleSortOrder} >
-                    <FontAwesomeIcon icon={sortOrder === "none" ? faMinus : sortOrder === "asc" ? faArrowUp : faArrowDown} />
+                    <FontAwesomeIcon icon={sortOrder === "none" ? faMinus : sortOrder === "asc" ?  faArrowDown : faArrowUp} />
                   </Button>
                 </th>
                 <th scope="col">Estado</th>
@@ -228,6 +255,7 @@ const TableAppointment = ({ appointments }) => {
                       handleClose={handleCloseUpdateModal}
                       appointmentId={selectedAppointment}
                       handleAddAppointment={fetchAppointments}
+                      updateAppointments={updateAppointments}
                     />
                     <Button
                       className="btn btn-table basic-btn"

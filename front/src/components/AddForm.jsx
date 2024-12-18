@@ -11,19 +11,25 @@ import Swal from "sweetalert2";
 const AddForm = ({ fetchAppointments, handleCloseModal }) => {
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
+  const [occupiedTimes, setOccupiedTimes] = useState([]);
+
 
   const schema = yup.object().shape({
     name: yup
     .string()
-    .matches(/^[a-zA-Z\s]+$/, "El nombre solo puede contener letras")
+    .matches(/^[a-zA-ZáéíóúÁÉÍÓÚ\s]+$/, "El nombre solo puede contener letras")
     .required("Nombre es requerido"),
     phone: yup
     .string()
-    .matches(/^[3][0-9]{9}$/, "El teléfono debe tener el formato 3814231548 (sin 0 y sin 15)")
+    .matches(
+      /^\d{2,3}9\d{2,4}\d{6,8}$/,
+      "Formato correcto: código país + 9 + código área + número (sin 0 ni 15). Ejemplo: 5493814752316"
+    )
     .required("Teléfono es requerido"),
     appointmentType: yup.string().required("Tipo de consulta es requerido"),
     date: yup.date().required("Fecha de cita es requerida"),
   });
+
 
   // Obtener la fecha y hora actual
   const now = new Date();
@@ -63,9 +69,27 @@ const AddForm = ({ fetchAppointments, handleCloseModal }) => {
     }
   };
 
-  const handleDateChange = (date) => {
+  const handleDateChange = async (date) => {
     setSelectedDate(date);
+  
+    // Obtener horarios ocupados para la fecha seleccionada
+    try {
+      const response = await axios.get("http://localhost:5000/api/appointments", {
+        withCredentials: true,
+      });
+      const allAppointments = response.data;
+  
+      const formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+      const occupiedTimesForDate = allAppointments
+        .filter((appointment) => appointment.date === formattedDate)
+        .map((appointment) => appointment.hour);
+  
+      setOccupiedTimes(occupiedTimesForDate);
+    } catch (error) {
+      console.error("Error fetching occupied times:", error);
+    }
   };
+  
 
   const handleTimeChange = (event) => {
     const time = event.target.value;
@@ -79,23 +103,24 @@ const AddForm = ({ fetchAppointments, handleCloseModal }) => {
       { start: 16, end: 19 },
     ];
     const intervalMinutes = 30;
-
+  
     intervals.forEach(({ start, end }) => {
       for (let hour = start; hour < end; hour++) {
         for (let minute = 0; minute < 60; minute += intervalMinutes) {
           const hourFormatted = hour.toString().padStart(2, "0");
           const minuteFormatted = minute.toString().padStart(2, "0");
           const timeString = `${hourFormatted}:${minuteFormatted}`;
-          times.push(timeString);
+  
+          // Excluir horarios ocupados
+          if (!occupiedTimes.includes(timeString)) {
+            times.push(timeString);
+          }
         }
       }
     });
-
+  
     // Filtrar horarios si se seleccionó el día actual
-    if (
-      selectedDate &&
-      selectedDate.toDateString() === now.toDateString()
-    ) {
+    if (selectedDate && selectedDate.toDateString() === now.toDateString()) {
       const currentHour = now.getHours();
       const currentMinute = now.getMinutes();
       return times.filter((time) => {
@@ -106,10 +131,10 @@ const AddForm = ({ fetchAppointments, handleCloseModal }) => {
         );
       });
     }
-
+  
     return times;
   };
-
+  
   return (
     <Formik
       validationSchema={schema}
