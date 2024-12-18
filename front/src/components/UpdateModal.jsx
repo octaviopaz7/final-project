@@ -22,7 +22,7 @@ const UpdateModal = ({ show, handleClose, appointmentId, handleAddAppointment,up
 
   const now = new Date();
 
-  // Esquema de validación
+  
   const schema = yup.object().shape({
     name: yup
       .string()
@@ -61,7 +61,7 @@ const UpdateModal = ({ show, handleClose, appointmentId, handleAddAppointment,up
           setAppointmentType(appointmentType);
           setSelectedTime(hour);
 
-          // Obtener citas del mismo día y extraer horarios ocupados
+          
           const allAppointmentsResponse = await axios.get("http://localhost:5000/api/appointments", {
             headers: { Authorization: `Bearer ${token}` },
           });
@@ -70,11 +70,11 @@ const UpdateModal = ({ show, handleClose, appointmentId, handleAddAppointment,up
           const occupiedTimes = allAppointments
             .filter(
               (appointment) =>
-                appointment.date === date && appointment._id !== appointmentId // Excluir la cita actual
+                appointment.date === date && appointment._id !== appointmentId 
             )
             .map((appointment) => appointment.hour);
 
-          setOccupiedTimes(occupiedTimes); // Guardar horarios ocupados     
+          setOccupiedTimes(occupiedTimes);   
           
         } catch (error) {
           console.error("Error fetching appointment details:", error);
@@ -104,7 +104,7 @@ const UpdateModal = ({ show, handleClose, appointmentId, handleAddAppointment,up
   const handleCloseAndReset = () => {
     handleClose();
     resetFields();
-    updateAppointments(); // Llama la función para ordenar y actualizar las citas
+    updateAppointments(); 
   };
 
   const handleUpdate = async (event) => {
@@ -131,7 +131,7 @@ const UpdateModal = ({ show, handleClose, appointmentId, handleAddAppointment,up
       );
       
       await handleAddAppointment();
-      updateAppointments(); // Llama la función para ordenar y actualizar las citas
+      updateAppointments(); 
 
       Swal.fire({
         icon: "success",
@@ -161,7 +161,7 @@ const UpdateModal = ({ show, handleClose, appointmentId, handleAddAppointment,up
   const handleDateChange = async (date) => {
     setSelectedDate(date);
   
-    // Obtener horarios ocupados para la nueva fecha seleccionada
+    
     try {
       const response = await axios.get("http://localhost:5000/api/appointments", {
         headers: { Authorization: `Bearer ${token}` },
@@ -200,7 +200,7 @@ const UpdateModal = ({ show, handleClose, appointmentId, handleAddAppointment,up
           const minuteFormatted = minute.toString().padStart(2, "0");
           const timeString = `${hourFormatted}:${minuteFormatted}`;
   
-          // Excluir horarios ocupados
+          
           if (!occupiedTimes.includes(timeString)) {
             times.push(timeString);
           }
@@ -266,7 +266,7 @@ const UpdateModal = ({ show, handleClose, appointmentId, handleAddAppointment,up
                   dateFormat="dd/MM/yyyy"
                   locale={es}
                   className="form-control"
-                  minDate={new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1)} // Permite solo a partir de mañana
+                  minDate={new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1)} 
                 />
               </Form.Group>
             </Col>

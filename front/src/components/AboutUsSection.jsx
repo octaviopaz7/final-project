@@ -7,7 +7,7 @@ const AboutUsSection = () => {
                 <Row>
                     <Col lg={6} md={6} sm={12}>
                         <div className="aboutus-content">
-                            <p className='text-start mb-0 section-title'>Sobre nosotros</p>
+                            <p className='text-start mb-0 section-title'>SOBRE NOSOTROS</p>
                             <h2 className='fs-2 fw-bold text-start mt-3'>Tu sonrisa es nuestra prioridad</h2>
                             <p className='fs-5 text-start'>
                                 En el Centro Odontológico, nos dedicamos a proporcionar una atención dental excepcional. Nuestro equipo altamente capacitado está comprometido con tu bienestar y comodidad, ofreciendo tratamientos preventivos, restaurativos y cosméticos para asegurar una sonrisa saludable y radiante.

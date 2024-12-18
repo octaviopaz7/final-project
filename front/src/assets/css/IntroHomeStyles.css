@@ -2,31 +2,65 @@
 
 .intro-container {
     height: 95vh;
-    background-image: url("../img/fondoHeader.jpg");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center; 
+    position: relative;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    color: #362a72;
+    align-items: end;
+    justify-content: end;
+    color: white;
     font-family: 'Source Code Pro', monospace; 
+    overflow: hidden;
 }
 
-.intro-text-wrap {
-    padding: 20px; 
-    background-color: rgba(73, 72, 72, 0.375); 
-    border-radius: 10px;
+.intro-container video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1; 
 }
+.intro-container::before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(270deg, rgb(0 0 0 / .2) 0%, rgb(0 0 0 / .7) 100%) !important;
+    z-index: 1;
+}
+.intro-text-wrap {
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 15%;
+}
+
 
 .intro-title {
     font-weight: 900;
     font-size: 3rem; 
     margin-bottom: 10px; 
+    font-family: "Red Hat Text", serif;
 }
 
 .intro-subtitle {
     font-size: 1.5rem; 
     font-weight: 500;
+}
+
+.btn-intro {
+    width: 20vw;
+    background-color: #1C7C82;
+    border-radius: 0;
+    border: 0;
+}
+
+.btn-intro:hover {
+    background-color: #69c1b4;
 }

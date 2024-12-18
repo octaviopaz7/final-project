@@ -1,50 +1,64 @@
-/* Estilo general de las tablas */
+
 .table > :not(caption) > * > * {
-  background-color: #3d367a;
-  color: hsl(80, 78%, 79%);
+  background-color: #88b5bf;
+  color: white;
   border: 2px solid #aed1f4;
   font-weight: 500;
   font-size: 16px;
 }
 
-/* Estilo de filas impares en tablas con clase table-striped */
-.table-striped > tbody > tr:nth-of-type(odd) > * {
-  --bs-table-bg-type: #44339cc9;
+.table>thead>tr>th {
+  background-color: #1C7C82;
 }
 
-/* Estilo específico para filas impares con clase table-row en tablas con clase table-striped */
+.table-striped > tbody > tr:nth-of-type(odd) > * {
+  --bs-table-bg-type: #88b5bf;
+}
+
 .table-striped > tbody > tr.table-row:nth-of-type(odd) > * {
-  --bs-table-bg-type: #44339cc9;
+  --bs-table-bg-type: #88b5bf;
 }
 
 
 .btn-table {
-  background-color: #170d35;
-  color: #d7f39e;
-  border: 2px solid #d7f39e;
+  background-color: #1C7C82;
+  color: white;
+  border: 2px solid #1C7C82;
   margin-right: 5%;
+  border-radius: 25px;
+  transition: 1s;
+}
+.btn-table:hover{
+  border: 2px none;
+  transform: scale(1.1);
 }
 
+.btn-table.trash-icon:hover{
+  background-color: rgb(185, 50, 50);
+}
 .modal-header,
 .modal-body,
 .modal-footer {
-  background-color: #170d35;
-  color: #d7f39e;
+  background-color: white;
+  color: #1C7C82;
   border: none;
 }
-
+.modal-header {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
 .modal-body input,
 .modal-body input:focus {
-  color: #d7f39e;
+  color: #1C7C82;
   font-weight: 500;
 }
 
 .modal-header .btn-close{
-  background-color: #d7f39e !important;
+  background-color: #1C7C82 !important;
 }
 
 .contact-section-title{
-  color: #3d367a;
+  color: #1C7C82;
   font-size: 2rem;
   font-weight: 700;
   text-align: center;
@@ -52,19 +66,25 @@
 
 .form-check-input {
   font-size: 1.7rem;
-  background-color:#d7f39e;
-  border: 2px solid #170d35;
+  background-color:#88b5bf;
+  border: 2px solid #1C7C82;
 }
 .modal-body select.form-select, option, td .form-select{
-  background-color: #d7f39e;
-  color:#170d35;
+  background-color: #88b5bf;
+  color:#1C7C82;
   font-weight: 500;
 }
 .modal-body .form-control{
-  color: #d7f39e;
+  color: #88b5bf;
 }
 .form-check-input:checked{
-  background-color:#170d35;
-  border: 2px solid #d7f39e;
+  background-color:#1C7C82;
+  border: 2px solid #88b5bf;
  
+}
+
+.modal-body select.form-select, option, td .form-select {
+  background-color: #1C7C82;
+  color: white;
+  font-weight: 500;
 }

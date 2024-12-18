@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button, Form, Modal } from 'react-bootstrap';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
-import { Navigate } from 'react-router-dom'; // Importa Navigate desde react-router-dom
+import { Navigate } from 'react-router-dom'; 
 import Swal from 'sweetalert2';
 
 const Login = ({ show, handleClose }) => {

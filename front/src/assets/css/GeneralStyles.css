@@ -1,86 +1,87 @@
 
-/* Sección de servicios de introducción */
 
-/* Sección de servicios */
 .services-section {
     justify-content: center;
     min-height: 70vh;
 }
 
-/* Botón de formulario de agregar */
+.services-container {
+  background-color: #e9f6f4;
+  width: 100%;
+  padding: 5% 0;
+}
 .btn-form-add {
-    background-color: #3d367a;
+    background-color: #88b5bf;
     color: #D7F39E;
     font-weight: 700;
-    border: 3px solid #3d367a;
+    border: 3px solid #88b5bf;
     width: 20rem;
     border-radius: 25px;
 }
 .btn-form-add:hover{
-   color: #3d367a;
+   color: #88b5bf;
    background-color: #D7F39E;
 }
 
-/* Etiquetas de formulario de agregar */
+
 .add-form-label {
-    color: #3d367a;
+    color: #88b5bf;
     font-weight: 600;
 }
 
-/* Controles del formulario */
+
 .form-control {
     background-color: transparent;
     border: none;
     border-radius: 0%;
-    border-bottom: 2px solid #3d367a;
-    color: #3d367a;
+    border-bottom: 2px solid #88b5bf;
+    color: #333;
     font-weight: 600;
 }
 
-/* Efecto focus en los controles del formulario */
 .form-control:focus {
     background-color: transparent;
-    border: 2px solid #3d367a;
+    border: 2px solid #88b5bf;
     border-radius: 25px;
 }
 
-/* Filas del formulario */
+
 .form-row {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-/* Estilo global para los modales de SweetAlert2 */
+
 .swal2-popup {
-    background-color: #170d35 !important; /* Fondo del modal */
-    color: #d7f39e !important;           /* Color del texto */
-    border: 2px solid #d7f39e !important; /* Borde */
-    border-radius: 10px !important;      /* Bordes redondeados */
-    font-family: 'Roboto', sans-serif;  /* Fuente */
+    background-color: #88b5bf;
+    color: white;          
+    border: 2px solid #1C7C82; 
+    border-radius: 10px;     
+    font-family: 'Roboto', sans-serif;  
   }
   
   .swal2-title {
-    color: #d7f39e !important;          /* Color del título */
-    font-size: 1.8rem !important;       /* Tamaño del título */
-    font-weight: bold !important;
+    color: #1C7C82 ;          
+    font-size: 1.8rem ;       
+    font-weight: bold ;
   }
   
   .swal2-html-container {
-    color: #d7f39e  !important;          /* Color del texto principal */
-    font-size: 1.2rem !important;
+    color: #1C7C82;          
+    font-size: 1.2rem;
   }
   
   .swal2-confirm {
-    background-color: #d7f39e !important; /* Fondo del botón */
-    color: #170d35 !important;              /* Color del texto del botón */
-    border-radius: 5px !important;
-    padding: 10px 20px !important;
-    font-weight: bold !important;
+    background-color: #1C7C82; 
+    color: white;              
+    border-radius: 5px ;
+    padding: 10px 20px ;
+    font-weight: bold;
   }
   
   .swal2-cancel {
-    background-color: #f5f5f5 !important; /* Fondo del botón de cancelar */
+    background-color: #f5f5f5;
     color: #333 !important;
     border-radius: 5px !important;
     padding: 10px 20px !important;

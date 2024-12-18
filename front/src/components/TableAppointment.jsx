@@ -258,7 +258,7 @@ const TableAppointment = ({ appointments }) => {
                       updateAppointments={updateAppointments}
                     />
                     <Button
-                      className="btn btn-table basic-btn"
+                      className="btn btn-table basic-btn trash-icon"
                       onClick={() => handleShow(appointment)}
                     >
                       <FontAwesomeIcon icon={faTrash} />

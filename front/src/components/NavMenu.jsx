@@ -1,9 +1,9 @@
 import { Container, Nav, Navbar, Offcanvas } from 'react-bootstrap';
-import { Link, Navigate } from 'react-router-dom'; // Importa Navigate de react-router-dom
+import { Link, Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import LogoDiente from '../assets/img/LogoDiente.png';
 import { useState } from 'react';
-import { home, services, appointments, contact } from '../routes/routes.js'; // Eliminé 'users' ya que no se estaba usando.
+import { home, services, appointments, contact } from '../routes/routes.js'; 
 import Login from './Login';
 import Swal from 'sweetalert2';
 
@@ -21,31 +21,30 @@ const NavMenu = () => {
             title: 'Sesión cerrada',
             text: 'Has cerrado sesión correctamente.',
         }).then(() => {
-            // Redirigir después de mostrar la alerta
             return <Navigate to={home} />;
         });
     };
 
     return (
         <>
-            <Navbar expand="lg" sticky="top" style={{ backgroundColor: '#3d367a' }}>
+            <Navbar expand="lg" sticky="top" style={{ backgroundColor: '#88b5bf' }}>
                 <Container>
-                    <Navbar.Brand as={Link} to={home} className="d-flex align-items-center" style={{ color: '#ffffff' }}>
+                    {/*<Navbar.Brand as={Link} to={home} className="d-flex align-items-center" style={{ color: '#ffffff' }}>
                         <img src={LogoDiente} alt="Logo de Smile Clinic" className="logo-image me-2" style={{ width: '40px', height: 'auto' }} />
                         Smile Clinic
-                    </Navbar.Brand>
+                    </Navbar.Brand> */}
                     <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-lg`} />
                     <Navbar.Offcanvas
                         id={`offcanvasNavbar-expand-lg`}
                         aria-labelledby={`offcanvasNavbarLabel-expand-lg`}
-                        placement="end"
+                        placement="center"
                     >
                         <Offcanvas.Header closeButton>
                             <Offcanvas.Title id={`offcanvasNavbarLabel-expand-lg`}>
                             </Offcanvas.Title>
                         </Offcanvas.Header>
                         <Offcanvas.Body>
-                            <Nav className="justify-content-end flex-grow-1 pe-3">
+                            <Nav className="justify-content-center flex-grow-1 pe-3">
                                 {isAuthenticated ? (
                                     <>
                                         <Nav.Link as={Link} to={home} className='nav-link-item fw-semibold' >Inicio</Nav.Link>

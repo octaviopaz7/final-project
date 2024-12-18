@@ -58,7 +58,7 @@ const AddForm = ({ fetchAppointments, handleCloseModal }) => {
 
       await fetchAppointments();
       resetForm();
-      handleCloseModal(); // Cerrar el modal después de agregar el turno
+      handleCloseModal(); 
     } catch (error) {
       console.error("Error al agregar turno:", error);
       Swal.fire({
@@ -72,7 +72,6 @@ const AddForm = ({ fetchAppointments, handleCloseModal }) => {
   const handleDateChange = async (date) => {
     setSelectedDate(date);
   
-    // Obtener horarios ocupados para la fecha seleccionada
     try {
       const response = await axios.get("http://localhost:5000/api/appointments", {
         withCredentials: true,
@@ -111,7 +110,7 @@ const AddForm = ({ fetchAppointments, handleCloseModal }) => {
           const minuteFormatted = minute.toString().padStart(2, "0");
           const timeString = `${hourFormatted}:${minuteFormatted}`;
   
-          // Excluir horarios ocupados
+       
           if (!occupiedTimes.includes(timeString)) {
             times.push(timeString);
           }
@@ -119,7 +118,7 @@ const AddForm = ({ fetchAppointments, handleCloseModal }) => {
       }
     });
   
-    // Filtrar horarios si se seleccionó el día actual
+   
     if (selectedDate && selectedDate.toDateString() === now.toDateString()) {
       const currentHour = now.getHours();
       const currentMinute = now.getMinutes();
@@ -230,7 +229,7 @@ const AddForm = ({ fetchAppointments, handleCloseModal }) => {
             </Col>
           </Row>
           <Row className="d-flex justify-content-center">
-            <Button type="submit" className="btn-primary w-50 mt-3">
+            <Button type="submit" className="btn btn-table w-50 mt-3">
               Agregar
             </Button>
           </Row>
