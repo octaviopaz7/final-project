@@ -1,9 +1,9 @@
 /* Estilo para la barra de navegación */
 .navbar {
-    background-color: #3d367a; 
+    background-color: #88b5bf; 
 }
 .offcanvas-body, .offcanvas-header{
-    background-color: #3d367a;
+    background-color: #88b5bf;
 }
 /* Estilos para los enlaces de navegación */
 .nav-link-item {
@@ -22,7 +22,7 @@
     font-weight: 600; 
 }
 .btn-nav:hover, .btn-nav-b{
-    background-color: #3d367a;
+    background-color: #88b5bf;
     border: 2px solid #D7F39E;
     color: #D7F39E;
 }
@@ -49,13 +49,12 @@
 
 /* Estilos para las tarjetas */
 .card {
-    border: 2px solid #3d367a; 
-    border-radius: 25px; 
+    border: 2px solid #88b5bf; 
 }
 
 /* Estilos para el texto de color blanco */
 .color-white {
-    color: #3d367a; 
+    color: #88b5bf; 
 }
 
 

@@ -1,31 +1,31 @@
 body {
-    color: #3d367a;
+    background-color: #ffffff;
 }
 
 .basic-btn {
-    background-color: #3d367a;
+    background-color: #1C7C82;
     color: white;
-    border: 2px solid #D7F39E;
+    border: 2px solid #1C7C82;
     transition: 0.5s;
     font-weight: 600;
     font-size: 18px;
+    border-radius: 0;
 }
 
 .basic-btn:hover{
-    background-color: #D7F39E;
-    color: #3d367a;
-    border: 2px solid #3d367a;
+    background-color: #88b5bf;
+    color: white;
+    border: 2px solid #1C7C82;
     transform: scale(1.005);
 }
 
 ::-webkit-scrollbar {
     width: 15px;
-   
     background-color: #D7F39E;
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: #3d367a;
+    background-color: #88b5bf;
     border: 1px solid white;
     border-radius: 25px; 
     height: 6px;

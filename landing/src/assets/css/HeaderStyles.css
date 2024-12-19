@@ -1,0 +1,66 @@
+/* Estilo para la barra de navegación */
+.navbar {
+    background-color: #88b5bf; 
+}
+.offcanvas-body, .offcanvas-header{
+    background-color: #88b5bf;
+}
+/* Estilos para los enlaces de navegación */
+.nav-link-item {
+    color: white; 
+    transition: color 0.3s ease-out; 
+}
+
+.nav-link-item:hover {
+    color: #D7F39E; 
+}
+
+
+.btn-nav, .btn-nav-b:hover {
+    color: #D7F39E; 
+    background-color: #ffffff84; 
+    font-weight: 600; 
+}
+.btn-nav:hover, .btn-nav-b{
+    background-color: #88b5bf;
+    border: 2px solid #D7F39E;
+    color: #D7F39E;
+}
+
+.color-blue {
+    color: #c3c3c3; 
+}
+
+.navbar-nav .nav-link.active {
+    color: #D7F39E;
+
+}
+
+.header-row.row {
+    height: 80vh; 
+    justify-content: center; 
+    margin-bottom: 50px; 
+}
+
+
+.header-container.container-fluid {
+    padding: 5%; 
+}
+
+.card {
+    border: 2px solid #88b5bf; 
+}
+
+.color-white {
+    color: #88b5bf; 
+}
+
+
+.card-header-img{
+    background-image: url("../img/header.png");
+    height: 100%;
+    background-position: center;
+    border: none
+}
+
+

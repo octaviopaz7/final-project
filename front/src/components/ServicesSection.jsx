@@ -18,24 +18,27 @@ const servicios = [
 ];
 const ServicesSection = () => {
     return (
-        <section id="services" className="services-section d-flex align-items-center justify-content-center">
-            <Container>
+        <section id="services" className="services-section d-flex align-items-center justify-content-center flex-column">
+            <span className='section-title'>TRATAMIENTOS</span>
                 <h2 className="mt-4 mb-3 font-color fs-1 fw-bold text-center">Nuestros Servicios</h2>
                 <p className='subtitle-service-section fw-semibold fs-4 text-center'>Descubre cómo nuestros servicios pueden mejorar tu salud dental.</p>
-                <Row xs={1} md={3} className="g-4">
-                    {servicios.map((servicio, index) => (
-                        <Col key={index}>
-                            <Card className='card-service-home'>
-                                <Card.Img variant="top" src={servicio.imagen} />
-                                <Card.Body className='font-color'>
-                                    <Card.Title className='fw-bold'>{servicio.titulo}</Card.Title>
-                                    <Card.Text  className='fw-medium'>{servicio.descripcion}</Card.Text>
-                                </Card.Body>
-                            </Card>
-                        </Col>
-                    ))}
-                </Row>
-            </Container>
+                <div className='services-container'>
+                    <Container>
+                        <Row xs={1} md={3} className="g-4">
+                        {servicios.map((servicio, index) => (
+                            <Col key={index}>
+                                <Card className='card-service-home'>
+                                    <Card.Img variant="top" src={servicio.imagen} />
+                                    <Card.Body className='font-color'>
+                                        <Card.Title className='fw-bold'>{servicio.titulo}</Card.Title>
+                                        <Card.Text  className='fw-medium'>{servicio.descripcion}</Card.Text>
+                                    </Card.Body>
+                                </Card>
+                            </Col>
+                        ))}
+                    </Row>
+                    </Container>
+                </div>
         </section>
     )
 }
