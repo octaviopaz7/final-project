@@ -1,0 +1,90 @@
+
+.table > :not(caption) > * > * {
+  background-color: #88b5bf;
+  color: white;
+  border: 2px solid #aed1f4;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.table>thead>tr>th {
+  background-color: #1C7C82;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) > * {
+  --bs-table-bg-type: #88b5bf;
+}
+
+.table-striped > tbody > tr.table-row:nth-of-type(odd) > * {
+  --bs-table-bg-type: #88b5bf;
+}
+
+
+.btn-table {
+  background-color: #1C7C82;
+  color: white;
+  border: 2px solid #1C7C82;
+  margin-right: 5%;
+  border-radius: 25px;
+  transition: 1s;
+}
+.btn-table:hover{
+  border: 2px none;
+  transform: scale(1.1);
+}
+
+.btn-table.trash-icon:hover{
+  background-color: rgb(185, 50, 50);
+}
+.modal-header,
+.modal-body,
+.modal-footer {
+  background-color: white;
+  color: #1C7C82;
+  border: none;
+}
+.modal-header {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+.modal-body input,
+.modal-body input:focus {
+  color: #1C7C82;
+  font-weight: 500;
+}
+
+.modal-header .btn-close{
+  background-color: #1C7C82 !important;
+}
+
+.contact-section-title{
+  color: #1C7C82;
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.form-check-input {
+  font-size: 1.7rem;
+  background-color:#88b5bf;
+  border: 2px solid #1C7C82;
+}
+.modal-body select.form-select, option, td .form-select{
+  background-color: #88b5bf;
+  color:#1C7C82;
+  font-weight: 500;
+}
+.modal-body .form-control{
+  color: #88b5bf;
+}
+.form-check-input:checked{
+  background-color:#1C7C82;
+  border: 2px solid #88b5bf;
+ 
+}
+
+.modal-body select.form-select, option, td .form-select {
+  background-color: #1C7C82;
+  color: white;
+  font-weight: 500;
+}
