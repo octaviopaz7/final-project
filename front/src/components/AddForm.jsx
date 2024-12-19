@@ -1,41 +1,17 @@
 import { useState } from "react";
 import { Form, Button, Col, Row } from "react-bootstrap";
 import { Formik } from "formik";
-import * as yup from "yup";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import es from "date-fns/locale/es";
 import Swal from "sweetalert2";
+import {appointmentSchema } from "./validationSchemas";
 
 const AddForm = ({ fetchAppointments, handleCloseModal }) => {
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [occupiedTimes, setOccupiedTimes] = useState([]);
-
-
-  const schema = yup.object().shape({
-    name: yup
-    .string()
-    .matches(/^[a-zA-ZáéíóúÁÉÍÓÚ\s]+$/, "El nombre solo puede contener letras")
-    .required("Nombre es requerido"),
-    phone: yup
-    .string()
-    .matches(
-      /^\d{2,3}9\d{2,4}\d{6,8}$/,
-      "Formato correcto: código país + 9 + código área + número (sin 0 ni 15). Ejemplo: 5493814752316"
-    )
-    .required("Teléfono es requerido"),
-    appointmentType: yup.string().required("Tipo de consulta es requerido"),
-    date: yup
-    .date()
-    .required("Fecha de cita es requerida")
-    .nullable(),  
-    hour: yup
-    .string()
-    .required("Hora es requerida"),
-  });
-
 
   // Obtener la fecha y hora actual
   const now = new Date();
@@ -143,7 +119,7 @@ const AddForm = ({ fetchAppointments, handleCloseModal }) => {
   
   return (
     <Formik
-      validationSchema={schema}
+      validationSchema={appointmentSchema}
       initialValues={{
         name: "",
         phone: "",

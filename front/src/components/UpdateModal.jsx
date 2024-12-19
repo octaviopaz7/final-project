@@ -1,156 +1,106 @@
 import { useState, useEffect } from "react";
-import { Button, Form, Modal, Col, Row } from "react-bootstrap";
+import { Button, Modal, Col, Row } from "react-bootstrap";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import es from "date-fns/locale/es";
 import "react-datepicker/dist/react-datepicker.css";
 import { useAuth } from "../context/AuthContext";
-import { useAppointments } from "../context/AppointmentsContext";
 import Swal from "sweetalert2";
-import * as yup from "yup";
+import { useFormik } from "formik";
+import { appointmentSchema } from "./validationSchemas";
 
-const UpdateModal = ({ show, handleClose, appointmentId, handleAddAppointment,updateAppointments }) => {
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [appointmentType, setAppointmentType] = useState("");
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [selectedTime, setSelectedTime] = useState(null);
+const UpdateModal = ({ show, handleClose, appointmentId, handleAddAppointment, updateAppointments }) => {
   const [occupiedTimes, setOccupiedTimes] = useState([]);
-
   const { token } = useAuth();
-  const { fetchAppointments } = useAppointments();
 
   const now = new Date();
 
-  // Esquema de validación
-  const schema = yup.object().shape({
-    name: yup
-      .string()
-      .matches(/^[a-zA-ZáéíóúÁÉÍÓÚ\s]+$/, "El nombre solo puede contener letras")
-      .required("Nombre es requerido"),
-    phone: yup
-      .string()
-      .matches(
-        /^\d{2,3}9\d{2,4}\d{6,8}$/,
-        "Formato correcto: código país + 9 + código área + número (sin 0 ni 15). Ejemplo: 5493814752316"
-      )
-      .required("Teléfono es requerido"),
-    date: yup
-      .date()
-      .min(new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1), "No puedes seleccionar el día actual ni fechas pasadas")
-      .required("Fecha de cita es requerida"),
-      hour: yup
-          .string()
-          .required("Hora es requerida"),
-  });
+  const fetchAppointmentDetails = async () => {
+    if (appointmentId) {
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/api/appointments/${appointmentId}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        const { name, phone, appointmentType, date, hour } = response.data;
+        const [day, month, year] = date.split("/"); // dd/MM/yyyy
+        const dateObject = new Date(`${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}T00:00:00`);
+
+        formik.setValues({
+          name,
+          phone,
+          appointmentType,
+          date: dateObject,
+          hour,
+        });
+
+        const allAppointmentsResponse = await axios.get("http://localhost:5000/api/appointments", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const allAppointments = allAppointmentsResponse.data;
+
+        const occupiedTimes = allAppointments
+          .filter(
+            (appointment) =>
+              appointment.date === date && appointment._id !== appointmentId // Excluir la cita actual
+          )
+          .map((appointment) => appointment.hour);
+
+        setOccupiedTimes(occupiedTimes);
+      } catch (error) {
+        console.error("Error fetching appointment details:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Error al obtener los detalles",
+          text: "No se pudieron cargar los datos del turno.",
+        });
+      }
+    }
+  };
 
   useEffect(() => {
-    const fetchAppointmentDetails = async () => {
-      if (appointmentId) {
-        try {
-          const response = await axios.get(
-            `http://localhost:5000/api/appointments/${appointmentId}`,
-            {
-              headers: { Authorization: `Bearer ${token}` },
-            }
-          );
-          const { name, phone, appointmentType, date, hour } = response.data;
-          const dbDate = date;
-          const [day, month, year] = dbDate.split("/"); // dd/MM/yyyy
-          const dateObject = new Date(`${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}T00:00:00`);
-          setSelectedDate(dateObject);
-          setName(name);
-          setPhone(phone);
-          setAppointmentType(appointmentType);
-          setSelectedTime(hour);
-
-          // Obtener citas del mismo día y extraer horarios ocupados
-          const allAppointmentsResponse = await axios.get("http://localhost:5000/api/appointments", {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-          const allAppointments = allAppointmentsResponse.data;
-
-          const occupiedTimes = allAppointments
-            .filter(
-              (appointment) =>
-                appointment.date === date && appointment._id !== appointmentId // Excluir la cita actual
-            )
-            .map((appointment) => appointment.hour);
-
-          setOccupiedTimes(occupiedTimes); // Guardar horarios ocupados     
-          
-        } catch (error) {
-          console.error("Error fetching appointment details:", error);
-          Swal.fire({
-            icon: "error",
-            title: "Error al obtener los detalles",
-            text: "No se pudieron cargar los datos del turno.",
-          });
-        }
-      }
-    };
-
     if (show && appointmentId) {
       fetchAppointmentDetails();
     }
   }, [appointmentId, token, show]);
 
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      phone: "",
+      appointmentType: "",
+      date: new Date(),
+      hour: "",
+    },
+    validationSchema: appointmentSchema,
+    onSubmit: async (values, { resetForm }) => {
+      try {
+        const updatedAppointment = {
+          ...values,
+          date: `${values.date.getDate()}/${values.date.getMonth() + 1}/${values.date.getFullYear()}`,
+        };
 
-  const resetFields = () => {
-    setName("");
-    setPhone("");
-    setAppointmentType("");
-    setSelectedDate(new Date());
-    setSelectedTime(null);
-  };
+        await axios.put(
+          `http://localhost:5000/api/appointments/${appointmentId}`,
+          updatedAppointment,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
 
-  const handleCloseAndReset = () => {
-    handleClose();
-    resetFields();
-    updateAppointments(); // Llama la función para ordenar y actualizar las citas
-  };
+        await handleAddAppointment();
+        updateAppointments(); // Llama la función para ordenar y actualizar las citas
 
-  const handleUpdate = async (event) => {
-    event.preventDefault();
-    
-    try {
-      const values = { name, phone, date: selectedDate };
-      await schema.validate(values, { abortEarly: false });
-
-      const updatedAppointment = {
-        name,
-        phone,
-        appointmentType,
-        date: `${selectedDate.getDate()}/${selectedDate.getMonth() + 1}/${selectedDate.getFullYear()}`,
-        hour: selectedTime,
-      };
-
-      await axios.put(
-        `http://localhost:5000/api/appointments/${appointmentId}`,
-        updatedAppointment,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      
-      await handleAddAppointment();
-      updateAppointments(); // Llama la función para ordenar y actualizar las citas
-
-      Swal.fire({
-        icon: "success",
-        title: "Turno actualizado",
-        text: "El turno se modificó correctamente.",
-      });
-
-      await handleCloseAndReset();
-    } catch (error) {
-      if (error.name === "ValidationError") {
         Swal.fire({
-          icon: "error",
-          title: "Error de validación",
-          text: error.errors.join(", "),
+          icon: "success",
+          title: "Turno actualizado",
+          text: "El turno se modificó correctamente.",
         });
-      } else {
+
+        handleCloseAndReset();
+      } catch (error) {
         console.error("Error updating appointment:", error);
         Swal.fire({
           icon: "error",
@@ -158,34 +108,33 @@ const UpdateModal = ({ show, handleClose, appointmentId, handleAddAppointment,up
           text: "No se pudo modificar el turno. Por favor, inténtalo de nuevo.",
         });
       }
-    }
+    },
+  });
+
+  const handleCloseAndReset = () => {
+    handleClose();
+    formik.resetForm();
+    updateAppointments(); // Llama la función para ordenar y actualizar las citas
   };
 
   const handleDateChange = async (date) => {
-    setSelectedDate(date);
-  
-    // Obtener horarios ocupados para la nueva fecha seleccionada
+    formik.setFieldValue("date", date);
+
     try {
       const response = await axios.get("http://localhost:5000/api/appointments", {
         headers: { Authorization: `Bearer ${token}` },
       });
       const allAppointments = response.data;
-  
+
       const formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
       const occupiedTimes = allAppointments
         .filter((appointment) => appointment.date === formattedDate && appointment._id !== appointmentId)
         .map((appointment) => appointment.hour);
-  
+
       setOccupiedTimes(occupiedTimes);
     } catch (error) {
       console.error("Error fetching occupied times:", error);
     }
-  };
-  
-
-  const handleTimeChange = (event) => {
-    const time = event.target.value;
-    setSelectedTime(time);
   };
 
   const generateTimes = () => {
@@ -195,25 +144,23 @@ const UpdateModal = ({ show, handleClose, appointmentId, handleAddAppointment,up
       { start: 16, end: 19 },
     ];
     const intervalMinutes = 30;
-  
+
     intervals.forEach(({ start, end }) => {
       for (let hour = start; hour < end; hour++) {
         for (let minute = 0; minute < 60; minute += intervalMinutes) {
           const hourFormatted = hour.toString().padStart(2, "0");
           const minuteFormatted = minute.toString().padStart(2, "0");
           const timeString = `${hourFormatted}:${minuteFormatted}`;
-  
-          // Excluir horarios ocupados
+
           if (!occupiedTimes.includes(timeString)) {
             times.push(timeString);
           }
         }
       }
     });
-  
+
     return times;
   };
-  
 
   return (
     <Modal show={show} onHide={handleCloseAndReset}>
@@ -221,34 +168,45 @@ const UpdateModal = ({ show, handleClose, appointmentId, handleAddAppointment,up
         <Modal.Title>Modificar Turno</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form onSubmit={handleUpdate}>
-          <Form.Group className="mb-3" controlId="formName">
-            <Form.Label>Nombre</Form.Label>
-            <Form.Control
+        <form onSubmit={formik.handleSubmit}>
+          <div className="mb-3">
+            <label htmlFor="name">Nombre</label>
+            <input
+              id="name"
               type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
+              className={`form-control ${formik.touched.name && formik.errors.name ? "is-invalid" : ""}`}
+              value={formik.values.name}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
             />
-          </Form.Group>
+            {formik.touched.name && formik.errors.name && (
+              <div className="invalid-feedback">{formik.errors.name}</div>
+            )}
+          </div>
 
-          <Form.Group className="mb-3" controlId="formPhone">
-            <Form.Label>Teléfono</Form.Label>
-            <Form.Control
+          <div className="mb-3">
+            <label htmlFor="phone">Teléfono</label>
+            <input
+              id="phone"
               type="text"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              required
+              className={`form-control ${formik.touched.phone && formik.errors.phone ? "is-invalid" : ""}`}
+              value={formik.values.phone}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
             />
-          </Form.Group>
+            {formik.touched.phone && formik.errors.phone && (
+              <div className="invalid-feedback">{formik.errors.phone}</div>
+            )}
+          </div>
 
-          <Form.Group className="mb-3" controlId="formAppointmentType">
-            <Form.Label>Tipo de consulta</Form.Label>
-            <Form.Control
-              as="select"
-              value={appointmentType}
-              onChange={(e) => setAppointmentType(e.target.value)}
-              required
+          <div className="mb-3">
+            <label htmlFor="appointmentType">Tipo de consulta</label>
+            <select
+              id="appointmentType"
+              className={`form-control ${formik.touched.appointmentType && formik.errors.appointmentType ? "is-invalid" : ""}`}
+              value={formik.values.appointmentType}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
             >
               <option value="">Seleccionar tipo</option>
               <option value="Consulta">Consulta</option>
@@ -256,30 +214,39 @@ const UpdateModal = ({ show, handleClose, appointmentId, handleAddAppointment,up
               <option value="Tratamiento">Tratamiento</option>
               <option value="Control">Control</option>
               <option value="Otro">Otro</option>
-            </Form.Control>
-          </Form.Group>
+            </select>
+            {formik.touched.appointmentType && formik.errors.appointmentType && (
+              <div className="invalid-feedback">{formik.errors.appointmentType}</div>
+            )}
+          </div>
 
           <Row>
             <Col md="6">
-              <Form.Group className="mb-3" controlId="formDate">
-                <Form.Label>Fecha de la cita</Form.Label>
+              <div className="mb-3">
+                <label htmlFor="date">Fecha de la cita</label>
                 <DatePicker
-                  selected={selectedDate}
+                  id="date"
+                  selected={formik.values.date}
                   onChange={(date) => handleDateChange(date)}
                   dateFormat="dd/MM/yyyy"
                   locale={es}
                   className="form-control"
-                  minDate={new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1)} // Permite solo a partir de mañana
+                  minDate={new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1)}
                 />
-              </Form.Group>
+                {formik.touched.date && formik.errors.date && (
+                  <div className="invalid-feedback d-block">{formik.errors.date}</div>
+                )}
+              </div>
             </Col>
             <Col md="6">
-              <Form.Group className="mb-3" controlId="formTime">
-                <Form.Label>Hora de la cita</Form.Label>
+              <div className="mb-3">
+                <label htmlFor="hour">Hora de la cita</label>
                 <select
-                  value={selectedTime}
-                  onChange={handleTimeChange}
+                  id="hour"
                   className="form-control"
+                  value={formik.values.hour}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                 >
                   <option value="">Seleccionar hora</option>
                   {generateTimes().map((time, index) => (
@@ -288,7 +255,10 @@ const UpdateModal = ({ show, handleClose, appointmentId, handleAddAppointment,up
                     </option>
                   ))}
                 </select>
-              </Form.Group>
+                {formik.touched.hour && formik.errors.hour && (
+                  <div className="invalid-feedback d-block">{formik.errors.hour}</div>
+                )}
+              </div>
             </Col>
           </Row>
 
@@ -300,7 +270,7 @@ const UpdateModal = ({ show, handleClose, appointmentId, handleAddAppointment,up
               Modificar
             </Button>
           </Modal.Footer>
-        </Form>
+        </form>
       </Modal.Body>
     </Modal>
   );
