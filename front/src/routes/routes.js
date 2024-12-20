@@ -1,4 +1,6 @@
-export const home = "/";
+export const login = "/";
+
+export const home = "/inicio";
 
 export const services = "/servicios";
 

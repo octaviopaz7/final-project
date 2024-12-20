@@ -34,11 +34,10 @@
         color:white;
         background-size: cover;
         padding: 10rem 0 0;
-        max-width: 35ch;
         border-radius: 0.5rem;
         overflow: hidden;
         transition: transform 500ms ease;
-        margin: 2rem auto;
+        width: 100%;
         display: block;
     }
   
@@ -51,8 +50,8 @@
   }
   
   .card-large .card-content {
-    --padding: 1.5rem;
-    padding: var(--padding);
+    padding: 1.4rem;
+    height: 100%;
     background: linear-gradient(
       hsl(0 0% 0% / 0),
       hsl(20 0% 0% / 0.3) 20%,
@@ -202,10 +201,16 @@
 }
 
 .btn-contact{
+  background-color: #1C7C82;
+  color: white;
     height: 2.5rem;
     font-weight: 700;
 }
-
+.btn-contact:hover{
+  background-color: #88b5bf;
+  color: white;
+  border: none;
+}
 .aboutus-content h2{
     color: #1C7C82;
     font-family: "Domine", serif;

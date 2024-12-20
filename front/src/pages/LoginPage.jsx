@@ -1,11 +1,14 @@
+
 import { useState } from "react";
-import { Button, Form, Modal } from 'react-bootstrap';
+import { Button, Form} from 'react-bootstrap';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { Navigate } from 'react-router-dom'; 
 import Swal from 'sweetalert2';
+import video from '../assets/video/video8.mp4'
+import '../assets/css/LoginPage.css'
 
-const Login = ({ show, handleClose }) => {
+const LoginPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const { login } = useAuth();
@@ -16,8 +19,7 @@ const Login = ({ show, handleClose }) => {
         event.preventDefault();
         const { success, error } = await login(email, password);
         if (success) {
-            setRedirectToAdmin(true); 
-            handleClose(); 
+            setRedirectToAdmin(true);  
             Swal.fire({
                 icon: 'success',
                 title: '¡Bienvenido!',
@@ -37,12 +39,10 @@ const Login = ({ show, handleClose }) => {
         return <Navigate to="/inicio" />;
     }
 
-    return (
-        <Modal show={show} onHide={handleClose}>
-            <Modal.Header closeButton>
-                <Modal.Title>Iniciar Sesión</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
+  return (
+     <section className='video-container d-flex justify-content-center'>
+        <video autoPlay loop muted playsInline src={video} preload="metadata"></video>
+        <div className='login-wrap d-flex flex-column justify-content-center align-items-center'>
                 <Form onSubmit={handleLogin}>
                     <Form.Group className="mb-3" controlId="formEmail">
                         <Form.Label>Correo electrónico</Form.Label>
@@ -62,7 +62,7 @@ const Login = ({ show, handleClose }) => {
                             required
                         />
                     </Form.Group>
-                    <div className="d-flex justify-content-center">
+                    <div className="d-flex justify-content-center pt-4">
                         <Button className="basic-btn" type="submit">
                             Iniciar Sesión
                         </Button>
@@ -71,10 +71,9 @@ const Login = ({ show, handleClose }) => {
                         <div className="text-danger text-center mt-2">{loginError}</div>
                     )}
                 </Form>
-            </Modal.Body>
-        </Modal>
-    );
-};
+        </div>
+    </section>
+  )
+}
 
-export default Login;
-
+export default LoginPage
