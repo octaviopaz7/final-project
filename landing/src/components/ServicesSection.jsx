@@ -32,8 +32,7 @@ const ServicesSection = () => {
 
     return (
         <section id="services" className="services-section d-flex align-items-center justify-content-center flex-column">
-            <span className="section-title">TRATAMIENTOS</span>
-            <h2 className="mt-4 mb-3 font-color fs-1 fw-bold text-center">Nuestros Servicios</h2>
+            <h2 className="mt-2 mb-3 font-color fs-1 fw-bold text-center">Nuestros Servicios</h2>
             <p className="subtitle-service-section fw-semibold fs-4 text-center">Descubre cómo nuestros servicios pueden mejorar tu salud dental.</p>
             <div className="services-container">
                 <Container>

@@ -1,35 +1,18 @@
+
 import { useState } from "react";
 import { Form, Button, Col, Row } from "react-bootstrap";
 import { Formik } from "formik";
-import * as yup from "yup";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import es from "date-fns/locale/es";
 import Swal from "sweetalert2";
+import {appointmentSchema } from "./validationSchemas";
 
 const AddForm = ({ fetchAppointments, handleCloseModal }) => {
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [occupiedTimes, setOccupiedTimes] = useState([]);
-
-
-  const schema = yup.object().shape({
-    name: yup
-    .string()
-    .matches(/^[a-zA-ZáéíóúÁÉÍÓÚ\s]+$/, "El nombre solo puede contener letras")
-    .required("Nombre es requerido"),
-    phone: yup
-    .string()
-    .matches(
-      /^\d{2,3}9\d{2,4}\d{6,8}$/,
-      "Formato correcto: código país + 9 + código área + número (sin 0 ni 15). Ejemplo: 5493814752316"
-    )
-    .required("Teléfono es requerido"),
-    appointmentType: yup.string().required("Tipo de consulta es requerido"),
-    date: yup.date().required("Fecha de cita es requerida"),
-  });
-
 
   // Obtener la fecha y hora actual
   const now = new Date();
@@ -58,7 +41,7 @@ const AddForm = ({ fetchAppointments, handleCloseModal }) => {
 
       await fetchAppointments();
       resetForm();
-      handleCloseModal(); 
+      handleCloseModal(); // Cerrar el modal después de agregar el turno
     } catch (error) {
       console.error("Error al agregar turno:", error);
       Swal.fire({
@@ -72,6 +55,7 @@ const AddForm = ({ fetchAppointments, handleCloseModal }) => {
   const handleDateChange = async (date) => {
     setSelectedDate(date);
   
+    // Obtener horarios ocupados para la fecha seleccionada
     try {
       const response = await axios.get("http://localhost:5000/api/appointments", {
         withCredentials: true,
@@ -110,7 +94,7 @@ const AddForm = ({ fetchAppointments, handleCloseModal }) => {
           const minuteFormatted = minute.toString().padStart(2, "0");
           const timeString = `${hourFormatted}:${minuteFormatted}`;
   
-       
+          // Excluir horarios ocupados
           if (!occupiedTimes.includes(timeString)) {
             times.push(timeString);
           }
@@ -118,7 +102,7 @@ const AddForm = ({ fetchAppointments, handleCloseModal }) => {
       }
     });
   
-   
+    // Filtrar horarios si se seleccionó el día actual
     if (selectedDate && selectedDate.toDateString() === now.toDateString()) {
       const currentHour = now.getHours();
       const currentMinute = now.getMinutes();
@@ -136,7 +120,7 @@ const AddForm = ({ fetchAppointments, handleCloseModal }) => {
   
   return (
     <Formik
-      validationSchema={schema}
+      validationSchema={appointmentSchema}
       initialValues={{
         name: "",
         phone: "",
@@ -197,6 +181,7 @@ const AddForm = ({ fetchAppointments, handleCloseModal }) => {
               </Form.Group>
             </Col>
             <Col md="6">
+
               <Form.Group className="mb-3">
                 <Form.Label>Seleccionar Fecha</Form.Label>
                 <DatePicker
@@ -207,16 +192,25 @@ const AddForm = ({ fetchAppointments, handleCloseModal }) => {
                   }}
                   dateFormat="dd/MM/yyyy"
                   locale={es}
-                  className="form-control"
+                  className={`form-control ${errors.date && touched.date ? "is-invalid" : ""}`}
                   minDate={now}
                 />
+                <Form.Control.Feedback type="invalid">
+                {errors.date && touched.date && (
+    <div className="invalid-feedback">{errors.date}</div>
+  )}
+                </Form.Control.Feedback>
               </Form.Group>
+              
               <Form.Group className="mb-3">
                 <Form.Label>Seleccionar Hora</Form.Label>
                 <Form.Select
                   value={selectedTime}
-                  onChange={handleTimeChange}
-                  className="form-control"
+                  onChange={(event) => {
+                    handleTimeChange(event);
+                    setFieldValue("hour", event.target.value);
+                  }}
+                  className={`form-control ${errors.hour && touched.hour ? "is-invalid" : ""}`}
                 >
                   <option value="">Seleccionar hora</option>
                   {generateTimes().map((time, index) => (
@@ -225,11 +219,15 @@ const AddForm = ({ fetchAppointments, handleCloseModal }) => {
                     </option>
                   ))}
                 </Form.Select>
+                <Form.Control.Feedback type="invalid">
+                  {errors.hour}
+                </Form.Control.Feedback>
               </Form.Group>
+
             </Col>
           </Row>
           <Row className="d-flex justify-content-center">
-            <Button type="submit" className="btn btn-table w-50 mt-3">
+            <Button type="submit" className="btn-primary w-50 mt-3">
               Agregar
             </Button>
           </Row>

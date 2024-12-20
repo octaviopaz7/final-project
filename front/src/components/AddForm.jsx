@@ -225,7 +225,7 @@ const AddForm = ({ fetchAppointments, handleCloseModal }) => {
             </Col>
           </Row>
           <Row className="d-flex justify-content-center">
-            <Button type="submit" className="btn btn-table w-50 mt-3">
+            <Button type="submit" className="btn btn-table btn-form-add w-50 mt-3">
               Agregar
             </Button>
           </Row>

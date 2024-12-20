@@ -5,26 +5,25 @@
 .offcanvas-body, .offcanvas-header{
     background-color: #88b5bf;
 }
-/* Estilos para los enlaces de navegación */
+
 .nav-link-item {
     color: white; 
     transition: color 0.3s ease-out; 
 }
 
 .nav-link-item:hover {
-    color: #9d7de9; /* Cambio de color al pasar el mouse por encima */
+    color: #1C7C82; 
 }
 
-/* Estilos para el botón de navegación */
 .btn-nav, .btn-nav-b:hover {
-    color: #3d367a; 
+    color: #1C7C82; 
     background-color: #ffffff84; 
     font-weight: 600; 
 }
 .btn-nav:hover, .btn-nav-b{
     background-color: #88b5bf;
-    border: 2px solid #D7F39E;
-    color: #D7F39E;
+    border: 2px solid #1C7C82;
+    color: #1C7C82;
 }
 /* Estilos para el logo */
 .color-blue {

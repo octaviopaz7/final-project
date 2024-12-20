@@ -11,16 +11,17 @@
   padding: 5% 0;
 }
 .btn-form-add {
-    background-color: #88b5bf;
-    color: #D7F39E;
+    background-color: #1C7C82;
+    color: white;
     font-weight: 700;
     border: 3px solid #88b5bf;
     width: 20rem;
     border-radius: 25px;
 }
 .btn-form-add:hover{
-   color: #88b5bf;
-   background-color: #D7F39E;
+   color: white;
+   background-color: #88b5bf;
+   border: 3px solid #88b5bf;
 }
 
 

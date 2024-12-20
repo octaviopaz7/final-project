@@ -1,7 +1,7 @@
 import { Container, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Icons from "./Icons";
-//import LogoDiente from "../assets/img/LogoDiente.png";
+import LogoDiente from "../assets/img/logo.png";
 import "../assets/css/FooterStyles.css";
 
 const Footer = () => {
@@ -34,7 +34,7 @@ const Footer = () => {
             md={4}
             className="footer-col p-0 d-flex flex-column justify-content-center align-items-center position-relative"
           >
-            {/*<img src={LogoDiente} alt="Logo Diente" className="tooth-logo" />*/}
+            <img src={LogoDiente} alt="Logo Diente" className="tooth-logo" />
             <p className="text-muted">
               © {new Date().getFullYear()} San Miguel de Tucumán
             </p>

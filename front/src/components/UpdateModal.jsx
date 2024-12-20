@@ -27,28 +27,6 @@ const UpdateModal = ({ show, handleClose, appointmentId, handleAddAppointment, u
         const { name, phone, appointmentType, date, hour } = response.data;
         const [day, month, year] = date.split("/"); // dd/MM/yyyy
         const dateObject = new Date(`${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}T00:00:00`);
-  
-  const schema = yup.object().shape({
-    name: yup
-      .string()
-      .matches(/^[a-zA-ZáéíóúÁÉÍÓÚ\s]+$/, "El nombre solo puede contener letras")
-      .required("Nombre es requerido"),
-    phone: yup
-      .string()
-      .matches(
-        /^\d{2,3}9\d{2,4}\d{6,8}$/,
-        "Formato correcto: código país + 9 + código área + número (sin 0 ni 15). Ejemplo: 5493814752316"
-      )
-      .required("Teléfono es requerido"),
-    date: yup
-      .date()
-      .min(new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1), "No puedes seleccionar el día actual ni fechas pasadas")
-      .required("Fecha de cita es requerida"),
-      hour: yup
-          .string()
-          .required("Hora es requerida"),
-  });
-
 
         formik.setValues({
           name,
@@ -57,7 +35,6 @@ const UpdateModal = ({ show, handleClose, appointmentId, handleAddAppointment, u
           date: dateObject,
           hour,
         });
-
 
         const allAppointmentsResponse = await axios.get("http://localhost:5000/api/appointments", {
           headers: { Authorization: `Bearer ${token}` },
@@ -79,30 +56,6 @@ const UpdateModal = ({ show, handleClose, appointmentId, handleAddAppointment, u
           title: "Error al obtener los detalles",
           text: "No se pudieron cargar los datos del turno.",
         });
-
-          
-          const allAppointmentsResponse = await axios.get("http://localhost:5000/api/appointments", {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-          const allAppointments = allAppointmentsResponse.data;
-
-          const occupiedTimes = allAppointments
-            .filter(
-              (appointment) =>
-                appointment.date === date && appointment._id !== appointmentId 
-            )
-            .map((appointment) => appointment.hour);
-
-          setOccupiedTimes(occupiedTimes);   
-          
-        } catch (error) {
-          console.error("Error fetching appointment details:", error);
-          Swal.fire({
-            icon: "error",
-            title: "Error al obtener los detalles",
-            text: "No se pudieron cargar los datos del turno.",
-          });
-        }
       }
     }
   };
@@ -129,7 +82,6 @@ const UpdateModal = ({ show, handleClose, appointmentId, handleAddAppointment, u
           date: `${values.date.getDate()}/${values.date.getMonth() + 1}/${values.date.getFullYear()}`,
         };
 
-
         await axios.put(
           `http://localhost:5000/api/appointments/${appointmentId}`,
           updatedAppointment,
@@ -137,49 +89,9 @@ const UpdateModal = ({ show, handleClose, appointmentId, handleAddAppointment, u
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-  const resetFields = () => {
-    setName("");
-    setPhone("");
-    setAppointmentType("");
-    setSelectedDate(new Date());
-    setSelectedTime(null);
-  };
-
-  const handleCloseAndReset = () => {
-    handleClose();
-    resetFields();
-    updateAppointments(); 
-  };
-
-  const handleUpdate = async (event) => {
-    event.preventDefault();
-    
-    try {
-      const values = { name, phone, date: selectedDate };
-      await schema.validate(values, { abortEarly: false });
-
-      const updatedAppointment = {
-        name,
-        phone,
-        appointmentType,
-        date: `${selectedDate.getDate()}/${selectedDate.getMonth() + 1}/${selectedDate.getFullYear()}`,
-        hour: selectedTime,
-      };
-
-      await axios.put(
-        `http://localhost:5000/api/appointments/${appointmentId}`,
-        updatedAppointment,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      
-      await handleAddAppointment();
-      updateAppointments(); 
-
 
         await handleAddAppointment();
-        updateAppointments(); 
+        updateAppointments(); // Llama la función para ordenar y actualizar las citas
 
         Swal.fire({
           icon: "success",
@@ -207,9 +119,7 @@ const UpdateModal = ({ show, handleClose, appointmentId, handleAddAppointment, u
 
   const handleDateChange = async (date) => {
     formik.setFieldValue("date", date);
-    setSelectedDate(date);
-  
-    
+
     try {
       const response = await axios.get("http://localhost:5000/api/appointments", {
         headers: { Authorization: `Bearer ${token}` },

@@ -1,7 +1,7 @@
 import { Container, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Icons from "./Icons";
-import LogoDiente from "../assets/img/LogoDiente.png";
+import LogoDiente from "../assets/img/logo.png";
 import "../assets/css/FooterStyles.css";
 
 const Footer = () => {
