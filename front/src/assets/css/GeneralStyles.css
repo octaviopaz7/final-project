@@ -3,8 +3,11 @@
 .services-section {
     justify-content: center;
     min-height: 70vh;
+    background-color: #88b5bf;
 }
-
+.services-section h2 {
+  color: white;
+}
 .services-container {
   background-color: #88b5bf;
   width: 100%;

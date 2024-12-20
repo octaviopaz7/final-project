@@ -4,7 +4,7 @@ import video from '../assets/video/video5.mp4';
 import {Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendar } from '@fortawesome/free-regular-svg-icons';
-const phone = '+543813846942';
+const phone = '+543815408251';
 const whatsappMessage = 'Hola! Me comunico desde su página web y me gustaría *reservar un turno*';
 
 const IntroHome = () => {
@@ -14,7 +14,7 @@ const IntroHome = () => {
             <video autoPlay loop muted playsInline src={video} preload="metadata"></video>
             <div className='intro-text-wrap'>
                 <h1 className='intro-title'>Consultorio Odontológico</h1>
-                <p className='intro-subtitle'>Agendá un turno enviando un mensaje a +543815408251</p>
+                <p className='intro-subtitle'>Agendá un turno enviando un mensaje a +54 9 381 540 8251</p>
                 <Button className="btn-intro fw-bold fs-5"
                  href={whatsappUrl}
                  target="_blank"

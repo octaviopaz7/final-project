@@ -187,14 +187,13 @@
 
 
 .section-title{
-   color: #e9f6f4;
-    max-width: fit-content;
-    font-family: "Lato", serif;
-    font-weight: 900;
-    font-size: 3rem;
-    padding: 2px 20px;
-    letter-spacing: 5px;
-    line-height: .8em;
+  background-color: #1C7C82;
+  max-width: fit-content;
+  color: #e9f6f4;
+  font-weight: 700;
+  font-size: 18px;
+  padding: 2px 20px;
+  border-radius: 25px;
 }
 .text-abtus{
     font-weight: 500;

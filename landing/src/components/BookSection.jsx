@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 
-const phone = '+543813846942';
+const phone = '+543815408251';
 const whatsappMessage = 'Hola! Me comunico desde su página web y me gustaría *reservar un turno*';
 
 const BookSection = () => {

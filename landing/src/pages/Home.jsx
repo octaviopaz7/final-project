@@ -17,11 +17,25 @@ const Home = () => {
     <>
       {!isAuthenticated ? (
         <>
-          <IntroHome />
+          <div id="home">
+            <IntroHome />
+          </div>
+          <div id="servicios">
+
           <ServicesSection />
+          </div>
+          <div id="sobrenosotros">
+
           <AboutUsSection />
+          </div>
+          <div id="turnos">
+
           <BookSection />
+          </div>
+          <div id="contacto">
+
           <ContactSection />
+          </div>
         </>
       ) : (
         <HomeAdmin />

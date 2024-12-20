@@ -8,12 +8,12 @@ const AboutUsSection = () => {
                     <Col lg={6} md={6} sm={12}>
                         <div className="aboutus-content">
                             <p className='text-start mb-0 section-title'>SOBRE NOSOTROS</p>
-                            <h2 className='fs-2 fw-bold text-start mt-3'>Tu sonrisa es nuestra prioridad</h2>
+                            <h2 className='fs-2 fw-bold text-start mt-3'>Tu sonrisa es la prioridad</h2>
                             <p className='fs-5 text-start'>
-                                En el Centro Odontológico, nos dedicamos a proporcionar una atención dental excepcional. Nuestro equipo altamente capacitado está comprometido con tu bienestar y comodidad, ofreciendo tratamientos preventivos, restaurativos y cosméticos para asegurar una sonrisa saludable y radiante.
+                                En el consultorio odontológico, nos especializamos en ofrecer una atención personalizada y de calidad. Con amplia experiencia y capacitación, el profesional está comprometido con el bienestar y la comodidad de cada paciente, brindando tratamientos preventivos, restaurativos y estéticos para lograr una sonrisa saludable y radiante.   
                             </p>
                             <p className='text-start text-abtus fs-5 pt-2'>
-                                Descubre cómo podemos ayudarte a mejorar tu salud dental hoy mismo.
+                                Descubre cómo mejorar tu salud dental con una atención dedicada y profesional.
                             </p>
                         </div>
                     </Col>

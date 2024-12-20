@@ -30,10 +30,10 @@ const NavMenu = () => {
                         <Offcanvas.Body>
                             <Nav className="justify-content-center flex-grow-1 pe-3">
                             
-                                        <Nav.Link as={Link} to={home} className='nav-link-item fw-semibold' >Inicio</Nav.Link>
-                                        <Nav.Link as={Link} to={services} className='nav-link-item fw-semibold' >Servicios</Nav.Link>
-                                        <Nav.Link as={Link} to={appointments} className='nav-link-item fw-semibold' >Turnos</Nav.Link>
-                                        <Nav.Link as={Link} to={contact} className='nav-link-item fw-semibold' >Contactos</Nav.Link>
+                                        <Nav.Link href='#home' className='nav-link-item fw-semibold' >Inicio</Nav.Link>
+                                        <Nav.Link href='#servicios' className='nav-link-item fw-semibold' >Servicios</Nav.Link>
+                                        <Nav.Link href='#turnos' className='nav-link-item fw-semibold' >Turno</Nav.Link>
+                                        <Nav.Link href="#contacto" className='nav-link-item fw-semibold' >Contacto</Nav.Link>
                                     
                             </Nav>
                         </Offcanvas.Body>

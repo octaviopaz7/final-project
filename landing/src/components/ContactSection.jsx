@@ -77,11 +77,11 @@ const ContactSection = () => {
                             <p className="mb-3 fw-medium">Contáctanos para programar tu próxima consulta dental y resolver cualquier pregunta que puedas tener.</p>
                             <div className="d-flex align-items-center mb-3">
                                 <FontAwesomeIcon icon={faPhone} className="me-2" />
-                                <p className="mb-0 fw-semibold">+54 381 347 8761</p>
+                                <p className="mb-0 fw-semibold">+54 9 381 540-8251</p>
                             </div>
                             <div className="d-flex align-items-center">
                                 <FontAwesomeIcon icon={faEnvelope} className="me-2" />
-                                <p className="mb-0 fw-semibold">contacto@tudentista.com</p>
+                                <p className="mb-0 fw-semibold">consultoriosmilebot@gmail.com</p>
                             </div>
                         </div>
                     </Col>
