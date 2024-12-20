@@ -5,17 +5,17 @@ const servicios = [
     {
         titulo: 'Ortodoncia',
         descripcion: 'Tratamientos para alinear los dientes y corregir problemas de mordida mediante aparatos como brackets y alineadores.',
-        imagen: 'https://assets-global.website-files.com/601d7e7320ecf0fa9e816a33/601def4a7b7d528765398735_image-6-blog-dentist-template-p-2000.jpeg',
+        imagen: 'https://i.ibb.co/NSnF4tG/ortodoncia.jpg',
     },
     {
         titulo: 'Blanqueamiento dental',
         descripcion: 'Procedimientos estéticos para mejorar el color de los dientes, eliminando manchas y decoloraciones.',
-        imagen: 'https://assets-global.website-files.com/601d7e7320ecf0fa9e816a33/601def0b261d9f227a3d2f59_image-5-blog-dentist-template-p-800.jpeg',
+        imagen: 'https://mdentalaser.com/wp-content/uploads/2019/12/tips-para-blanqueamiento-dental.png',
     },
     {
         titulo: 'Implantes dentales',
         descripcion: 'Procedimientos para reemplazar dientes perdidos mediante la colocación de implantes de titanio que se integran con el hueso dental.',
-        imagen: 'https://assets-global.website-files.com/601d7e7320ecf0fa9e816a33/601deeec10c1a30a672b7178_image-4-blog-dentist-template-p-500.jpeg',
+        imagen: 'https://i.ibb.co/vY7qJ8g/implantes.jpg',
     }
 ];
 
